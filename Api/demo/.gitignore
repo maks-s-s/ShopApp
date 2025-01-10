@@ -1,0 +1,52 @@
+# Ignore Maven target directories
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+# Ignore STS files
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+# Ignore IntelliJ IDEA files
+.idea
+*.iws
+*.iml
+*.ipr
+
+# Ignore NetBeans files
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+/build/
+/!**/src/main/**/build/
+/!**/src/test/**/build/
+
+# Ignore VS Code files
+.vscode/
+
+# Ignore application properties with sensitive data
+application.properties
+
+# Ignore Gradle build files
+.gradle/
+build/
+gradle-wrapper.jar
+
+# Ignore other IDE files
+*.apk
+*.iml
+.gradle/
+.DS_Store
+
+# Ignore node modules (for JavaScript projects)
+node_modules/
+.npm/
+.yarn/
