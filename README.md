@@ -9,4 +9,4 @@ Online shop app (project for practice)
 This is my project to practice Java skills and acquire new ones (working with databases, creating APIs).
 Today, January 10, 2025, I created this repository based on a friend's advice. Development of the application started on December 2, 2024. During this time, the following features were completed: registration form, login, password change, main page (currently without a backend), and now I am working on the chat feature. I plan to commit daily and update the changelog.md. 
 
-P.S I am not quite good at English, so I use chatgpt to translate my text.
+### P.S I am not quite good at English, so I use chatgpt to translate my text.
