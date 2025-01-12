@@ -18,6 +18,13 @@
 ### Исправлено 
 - Баг с возможностью создания 2 пользователей с одинаковым email добавив пробел в конце (Использованием метода .trim())
 
+## [1.0.2] - 2025-01-12 Russian
+### Обновлен 
+- Сущность пользователя, добавлены поля для отслеживания мутов, банов, их времени, цвет ника, тега, и сам тег.
+### Добавлено
+- Возможность отрисовавания тега адаптером, дефолтные значения цвета для тега и имени, проверки на пустые значения, ендпоинты и запросы для тега и цветов.
+
+
 ## [1.0.0] - 2025-01-10 English
 ### Added
 - Initial version of the application and API.
@@ -36,6 +43,12 @@
 
 ### Fixed
 - Bug allowing the creation of two users with the same email by adding a space at the end (fixed by using the `.trim()` method).
+
+## [1.0.2] - 2025-01-12 English
+### Updated 
+- User entity: added fields for tracking mutes, bans, their durations, nickname color, tag, and the tag itself.
+### Added
+- Ability to render tags using an adapter, default color values for tags and names, checks for empty values, endpoints, and requests for tags and colors.
 
 
 ### P.S I am not quite good at English, so I use chatgpt to translate my text.
