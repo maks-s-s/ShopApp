@@ -141,4 +141,29 @@ public class UserController {
         }
     }
 
+    @GetMapping("/getPermissionByEmail")
+    public ResponseEntity<String> getPermissionByEmail(@RequestParam String email) {
+        User user = userService.findByEmail(email);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        }
+        else {
+            return ResponseEntity.status(HttpStatus.OK).body(user.getPermission());
+        }
+    }
+
+    @PutMapping("/setPermissionByEmail")
+    public ResponseEntity<Boolean> setPermissionByEmail(@RequestParam String email, @RequestParam String newPermission) {
+        User user = userService.findByEmail(email);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
+        }
+        else {
+            user.setPermission(newPermission);
+            userService.save(user);
+            return ResponseEntity.ok(true);
+        }
+    }
+
+
 }

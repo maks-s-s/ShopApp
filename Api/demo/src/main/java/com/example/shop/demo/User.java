@@ -22,6 +22,7 @@ public class User {
     private String tag;
     private String tagColor = "#1E1E1E";
     private String nameColor = "#1E1E1E";
+    private String permission = "user";
     // add sorted array "roles"
 
 
@@ -123,5 +124,14 @@ public class User {
 
     public void setNameColor(String nameColor) {
         this.nameColor = nameColor;
+    }
+
+
+    public String getPermission() {
+        return permission;
+    }
+
+    public void setPermission(String permission) {
+        this.permission = permission;
     }
 }

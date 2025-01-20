@@ -60,5 +60,24 @@
 - An event handler for clicking on a message: when clicked, a menu appears with options for actions on the message. The buttons are customizable, but the logic hasn't been implemented yet. Additionally, several bugs related to menu display have been fixed.
 
 
+## [1.0.4] - 2025-01-20 Russian
+### Добавлено
+- Таблица в базе данных с сущностью сообщения. 
+- Запросы для отображения сообщений в приложении, и отправки из приложения в БД.
+- Автообновление чата раз в 5 секунд
+- Ограничение в 50 сообщений 
+
+### Исправлено 
+- Баг с пропадающими сообщениями в момент обновления
+
+## [1.0.4] - 2025-01-20 English
+### Added
+- Table in database with entity of message
+- Requests for displaying messages, creating and adding them to database
+- Auto updater for chat (every 5 sec)
+- Limit for messages (50) 
+
+### Fixed
+- Bug with missed messages in moment of update
 
 ### P.S I am not quite good at English, so I use chatgpt to translate my text.
