@@ -19,21 +19,16 @@ public class MessageController {
 
     @GetMapping("/getAllMessages")
     public ResponseEntity<List<Message>> getPasswordByEmail() {
-        //get all messages
         List<Message> messageList = messageRepository.findAll();
-        // get 50 last messages
-        List<Message> messageListWith50messages = new ArrayList<>();
-        if (messageList.size() > 51) {
-            for (int i = 0; i < 50; i++) {
-                messageListWith50messages.add(messageList.get(messageList.size() - 1 - (50 - i)));
-            }
-            return ResponseEntity.status(HttpStatus.OK).body(messageListWith50messages);
-        }
         return ResponseEntity.status(HttpStatus.OK).body(messageList);
     }
 
     @PostMapping("/addNewMessage")
     public Message addNewMessage(@RequestBody Message message) {
         return messageService.addMessage(message);
+    }
+    @DeleteMapping("/clearChat")
+    public void clearChat() {
+        messageRepository.deleteAll();
     }
 }

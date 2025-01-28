@@ -80,4 +80,30 @@
 ### Fixed
 - Bug with missed messages in moment of update
 
+
+## [1.0.5] - 2025-01-21 Russian
+### Исправлено 
+- Пропадающие сообщения когда recyclerview зполнен достаточно 
+
+## [1.0.5] - 2025-01-21 English
+### Fixed
+- Missing messages when recyclerview full enough 
+
+## [1.0.6] - 2025-01-28 Russian
+### Добавлено
+- Автопрокрутка вниз при загрузке чата
+- Временная кнопка очистить чат
+
+### Исправлено 
+- Апдейтер для чата, теперь он действительно обновляет лист сообщений, из-за этого много прошлых багов исчезло
+
+## [1.0.6] - 2025-01-28 English
+### Added
+- Autoscroll to the end, when the chat-page loads
+- Button for cleaning chat
+
+### Fixed 
+- Chat adapter, now it update message, instead of removing all old mmessages and adding new, a lot of bugs dessapeared because of this decision
+
+
 ### P.S I am not quite good at English, so I use chatgpt to translate my text.
