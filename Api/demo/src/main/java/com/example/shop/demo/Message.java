@@ -6,8 +6,6 @@ import jakarta.persistence.*;
 @Table(name = "\"message\"")
 public class Message {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     private Long id;
     private String time;
     private String tag;
@@ -26,6 +24,8 @@ public class Message {
     private String sendersEmail;
     private String messageBackgroundColor;
     private String sendersAccess;
+    private String ChangerEmail;
+    private boolean wasChanged;
 
 
     public Message() {
@@ -173,5 +173,21 @@ public class Message {
 
     public Long getId() {
         return id;
+    }
+
+    public String getChangerEmail() {
+        return ChangerEmail;
+    }
+
+    public void setChangerEmail(String changerEmail) {
+        ChangerEmail = changerEmail;
+    }
+
+    public boolean isWasChanged() {
+        return wasChanged;
+    }
+
+    public void setWasChanged(boolean wasChanged) {
+        this.wasChanged = wasChanged;
     }
 }

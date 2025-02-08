@@ -106,4 +106,17 @@
 - Chat adapter, now it update message, instead of removing all old mmessages and adding new, a lot of bugs dessapeared because of this decision
 
 
-### P.S I am not quite good at English, so I use chatgpt to translate my text.
+## [1.0.7] - 2025-02-08 Russian
+### Добавлено
+- Кнопки "Изменить", "Удалить", "Копировать" для управления сообщениями, а так-же запросы для БД для работы кнопок
+
+### Исправлено 
+- Апдейтер для чата, переписан на более удобную версию
+
+## [1.0.7] - 2025-02-08 English
+### Added
+- Buttons "Edit," "Delete," and "Copy" for managing messages, as well as database queries to support button functionality.
+
+### Fixed 
+- Chat updater rewritten to a more convenient version.
+
