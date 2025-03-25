@@ -1,0 +1,82 @@
+package database;
+
+import androidx.room.Delete;
+
+import java.util.List;
+
+import Chat.message;
+import retrofit2.Call;
+import retrofit2.http.Body;
+import retrofit2.http.DELETE;
+import retrofit2.http.GET;
+import retrofit2.http.POST;
+import retrofit2.http.PUT;
+import retrofit2.http.Query;
+
+public interface UserApi {
+
+    @POST("/users/register")
+    Call<RDBUser> createUser(@Body RDBUser rdbUser);
+
+    @GET("/users")
+    Call<List<RDBUser>> getUsers();
+
+    @GET("/users/getPasswordByEmail")
+    Call<String> getPasswordByEmail(@Query("email") String email);
+
+    @GET("/users/countUsersWithEmail")
+    Call<Integer> countUsersWithEmail(@Query("email") String email);
+
+    @PUT("/users/changePassword")
+    Call<Boolean> changePassword(@Query("email") String email, @Query("newPassword") String newPassword);
+
+    @GET("/users/getUserNameByEmail")
+    Call<String> getUserNameByEmail(@Query("email") String email);
+
+    @GET("/users/getNameColorByEmail")
+    Call<String> getNameColorByEmail(@Query("email") String email);
+
+    @PUT("/users/setNameColorByEmail")
+    Call<Boolean> setNameColorByEmail(@Query("email") String email, @Query("newNameColor") String newNameColor);
+
+    @GET("/users/getTagByEmail")
+    Call<String> getTagByEmail(@Query("email") String email);
+
+    @PUT("/users/setTagByEmail")
+    Call<Boolean> setTagByEmail(@Query("email") String email, @Query("newTag") String newTag);
+
+    @GET("/users/getTagColorByEmail")
+    Call<String> getTagColorByEmail(@Query("email") String email);
+
+    @PUT("/users/setTagColorByEmail")
+    Call<Boolean> setTagColorByEmail(@Query("email") String email, @Query("newTagColor") String newTagColor);
+
+    @GET("/users/getPermissionByEmail")
+    Call<String> getPermissionByEmail(@Query("email") String email);
+
+    @PUT("/users/setPermissionByEmail")
+    Call<Boolean> setPermissionByEmail(@Query("email") String email, @Query("newPermission") String newPermission);
+
+    @GET("/message/getAllMessages")
+    Call<List<message>> getAllMessages();
+
+    @POST("/message/addNewMessage")
+    Call<message> addNewMessage (@Body message message);
+
+    @DELETE("/message/clearChat")
+    Call<Void> clearChat();
+
+    @PUT("/message/deleteMessage")
+    Call<Void> deleteMessage(@Query("id") long id, @Query("ChangerEmail") String ChangerEmail);
+
+    @PUT("/message/editMesage")
+    Call<Void> editMesage(@Query("id") long id, @Query("ChangerEmail") String ChangerEmail, @Query("newText") String newText);
+    @GET("/message/getIdForNextMessage")
+    Call<Long> getIdForNextMessage();
+
+    @PUT("/message/setUnChanged")
+    Call<Void> setUnChanged(@Query("id") long id);
+
+    @PUT("/message/setChanged")
+    Call<Void> setChanged(@Query("id") long id);
+}
