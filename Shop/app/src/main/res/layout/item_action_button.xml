@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+ <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="424px"
+        android:layout_height="60px"
+        android:orientation="vertical"
+        android:background="@android:color/transparent">
+        <Button
+            android:id="@+id/btnAction"
+            android:layout_width="409px"
+            android:layout_height="57px"
+            android:text="Action"
+            android:textSize="30px"
+            android:background="@android:color/transparent"
+            android:textAlignment="textStart"
+            android:layout_marginStart="10px"
+            android:layout_marginEnd="5px"
+            android:textStyle="bold"/>
+
+        <View
+            android:id="@+id/spliterator"
+            android:layout_width="424px"
+            android:layout_height="3px"
+            android:background="#9D9D9D" />
+    </LinearLayout>
+

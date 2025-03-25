@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="980px"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="35px"
+            android:background="@color/main_page" />
+
+        <FrameLayout
+            android:layout_width="980px"
+            android:layout_height="159px"
+            android:background="@color/main_page">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2px"
+                android:layout_gravity="top"
+                android:background="#6C6C6C" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_marginStart="20px"
+                android:layout_marginTop="21px">
+
+                <TextView
+                    android:id="@+id/repliedTag"
+                    android:layout_width="wrap_content"
+                    android:layout_height="45px"
+                    android:layout_gravity="start"
+                    android:background="@android:color/transparent"
+                    android:gravity="center"
+                    android:text="[Cпонсор дачи]"
+                    android:textColor="#2B187E"
+                    android:textSize="35px"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/repliedName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="45px"
+                    android:layout_gravity="end"
+                    android:background="@android:color/transparent"
+                    android:gravity="center"
+                    android:paddingStart="8px"
+                    android:text=" Nazaritto_Tankist"
+                    android:textColor="#1E1E1E"
+                    android:textSize="35px"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/repliedMessage"
+                android:layout_width="819px"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="35px"
+                android:layout_marginTop="67px"
+                android:background="@android:color/transparent"
+                android:gravity="start"
+                android:paddingBottom="10px"
+                android:text="Я ебаный лох, рыгал жени на диван и подставил дашу "
+                android:textColor="#1E1E1E"
+                android:textSize="35px" />
+
+            <ImageView
+                android:layout_width="50px"
+                android:layout_height="50px"
+                android:layout_gravity="end"
+                android:layout_marginTop="15px"
+                android:layout_marginEnd="15px"
+                android:background="@android:color/transparent"
+                android:scaleType="fitXY"
+                android:src="@drawable/free_icon_reply_all_3545555" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2px"
+                android:layout_gravity="bottom"
+                android:background="#6C6C6C" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="980px"
+            android:layout_height="wrap_content"
+            android:background="@color/main_page">
+
+            <TextView
+                android:id="@+id/Time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20px"
+                android:layout_marginTop="14px"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:text="10:41"
+                android:textColor="#1E1E1E"
+                android:textSize="30px" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginTop="14px"
+                android:layout_marginEnd="138px">
+
+                <TextView
+                    android:id="@+id/Tag"
+                    android:layout_width="wrap_content"
+                    android:layout_height="45px"
+                    android:layout_gravity="start"
+                    android:background="@android:color/transparent"
+                    android:gravity="center"
+                    android:text="[Lead Dev]"
+                    android:textColor="#FF0000"
+                    android:textSize="35px"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/Name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="45px"
+                    android:layout_gravity="end"
+                    android:background="@android:color/transparent"
+                    android:gravity="center"
+                    android:paddingStart="10px"
+                    android:text="UnBelievable_Xsoz"
+                    android:textColor="#611414"
+                    android:textSize="35px"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/avatar"
+                android:layout_width="90px"
+                android:layout_height="90px"
+                android:layout_marginStart="867px"
+                android:layout_marginTop="25px"
+                android:background="@drawable/avatarexample"
+                android:clipToOutline="true"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ava" />
+
+            <TextView
+                android:id="@+id/message"
+                android:layout_width="678px"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="161px"
+                android:layout_marginTop="62px"
+                android:background="@android:color/transparent"
+                android:gravity="end"
+                android:paddingBottom="10px"
+                android:text="Почему я съел 2кг оливье а в итоге похудел на 1.5кг :/"
+                android:textColor="#1E1E1E"
+                android:textSize="35px" />
+
+            <TextView
+                android:id="@+id/isEdited"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginStart="15px"
+                android:layout_marginBottom="10px"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:text="Изменено"
+                android:textColor="#1E1E1E"
+                android:textSize="30px"
+                android:visibility="invisible" />
+
+            <ImageView
+                android:id="@+id/isComplained"
+                android:layout_width="40px"
+                android:layout_height="40px"
+                android:layout_gravity="top"
+                android:layout_marginStart="111px"
+                android:layout_marginTop="13px"
+                android:background="@android:color/transparent"
+                android:scaleType="fitXY"
+                android:src="@drawable/free_icon_complain_5404320"
+                android:visibility="invisible" />
+        </FrameLayout>
+    </LinearLayout>
