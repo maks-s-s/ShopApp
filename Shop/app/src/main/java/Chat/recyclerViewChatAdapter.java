@@ -35,12 +35,13 @@ import java.util.List;
 import java.util.Objects;
 
 import database.ApiClient;
+import database.ApiHelper;
 import database.UserApi;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class recyclerViewChatAdapter extends  RecyclerView.Adapter<recyclerViewChatAdapter.MessageViewHolder> {
+public class recyclerViewChatAdapter extends  RecyclerView.Adapter<recyclerViewChatAdapter.MessageViewHolder> implements ApiHelper {
 
     private List<message> messageList;
     private Context context;
@@ -54,21 +55,25 @@ public class recyclerViewChatAdapter extends  RecyclerView.Adapter<recyclerViewC
     ImageButton sendButton;
     EditText messageInputField;
     TextView editingTag;
+    TextView isEdited;
     UserApi userApi = ApiClient.getUserApi();
+    Activity activity;
 
-    public recyclerViewChatAdapter(Context context, List<message> messageList, String currentUserEmail, FrameLayout editingLayout, TextView editingName, TextView editingText,
-                                   ImageButton editingCancel, ImageButton editButton, ImageButton sendButton, EditText messageInputField, TextView editingTag) {
+    public recyclerViewChatAdapter(Context context, List<message> messageList, String currentUserEmail) {
         this.context = context;
+        this.activity = (Activity) context;
         this.messageList = messageList;
         this.currentUserEmail = currentUserEmail;
-        this.editingLayout = editingLayout;
-        this.editingName = editingName;
-        this.editingText = editingText;
-        this.editingCancel = editingCancel;
-        this.editButton = editButton;
-        this.sendButton = sendButton;
-        this.messageInputField = messageInputField;
-        this.editingTag = editingTag;
+
+        this.editingLayout = activity.findViewById(R.id.editing_framelayout);
+        this.editingName = activity.findViewById(R.id.editing_name);
+        this.editingText = activity.findViewById(R.id.editing_text);
+        this.editingCancel = activity.findViewById(R.id.cancel_editting_button);
+        this.editButton = activity.findViewById(R.id.editButton);
+        this.sendButton = activity.findViewById(R.id.sendButton);
+        this.messageInputField = activity.findViewById(R.id.MessageEditText);
+        this.editingTag = activity.findViewById(R.id.editing_tag);
+        this.isEdited = activity.findViewById(R.id.isEdited);
     }
 
     @Override
@@ -93,6 +98,7 @@ public class recyclerViewChatAdapter extends  RecyclerView.Adapter<recyclerViewC
     @Override
     public void onBindViewHolder(@NonNull MessageViewHolder holder, int position) {
         message message = messageList.get(position);
+
         holder.nameTextView.setTextColor(Color.parseColor(message.getNameColor()));
         holder.nameTextView.setText(message.getName());
         holder.textTextView.setText(message.getText());
@@ -124,280 +130,7 @@ public class recyclerViewChatAdapter extends  RecyclerView.Adapter<recyclerViewC
                 popupWindow.showAsDropDown(v, 0, 0, Gravity.TOP | Gravity.START );
             }
 
-            if (Objects.equals(message.getSendersAccess(), "user")) {
-                if (Objects.equals(currentUserEmail, message.getSendersEmail())) {
-                    MessageAction copy = new MessageAction("Скопировать", true, v1 -> {
-                        copy(message.getText());
-                        popupWindow.dismiss();
-                    });
-                    actions.add(copy);
-
-                    MessageAction change = new MessageAction("Изменить", true, v1 -> {
-                        sendButton.setVisibility(View.GONE);
-                        editButton.setVisibility(View.VISIBLE);
-                        editingName.setText(message.getName());
-                        editingName.setTextColor(Color.parseColor(message.getNameColor()));
-                        editingText.setText(message.getText());
-                        editingTag.setText(message.getTag());
-                        editingTag.setTextColor(Color.parseColor(message.getTagColor()));
-
-                        editButton.setOnClickListener(e -> {
-                            String newText = String.valueOf(messageInputField.getText());
-                            if (!newText.isEmpty()) {
-                                edit(message, newText);
-
-                                editButton.setVisibility(View.GONE);
-                                sendButton.setVisibility(View.VISIBLE);
-                                editingLayout.setVisibility(View.GONE);
-
-                                messageInputField.setText("");
-
-
-                                TextView isEdited = v.findViewById(R.id.isEdited);
-                                isEdited.setVisibility(View.VISIBLE);
-                                notifyDataSetChanged();
-                            }
-                        });
-
-                        editingCancel.setOnClickListener(c -> {
-                            editButton.setVisibility(View.GONE);
-                            sendButton.setVisibility(View.VISIBLE);
-                            editingLayout.setVisibility(View.GONE);
-                        });
-
-                        editingLayout.setVisibility(View.VISIBLE);
-                        popupWindow.dismiss();
-                    });
-                    actions.add(change);
-
-                    MessageAction delete = new MessageAction("Удалить", true, v1 -> {
-                        delete(message);
-                        popupWindow.dismiss();
-                    });
-                    actions.add(delete);
-
-                } else {
-
-                    MessageAction copy = new MessageAction("Cкопировать", true, v1 -> {
-                        copy(message.getText());
-                        popupWindow.dismiss();
-                    });
-                    actions.add(copy);
-
-                }
-            } else if (Objects.equals(message.getSendersAccess(), "moderator")) {
-                if (Objects.equals(currentUserEmail, message.getSendersEmail())) {
-
-                    MessageAction copy = new MessageAction("Cкопировать", true, v1 -> {
-                        copy(message.getText());
-                        popupWindow.dismiss();
-                    });
-                    actions.add(copy);
-
-                    MessageAction change = new MessageAction("Изменить", true, v1 -> {
-                        sendButton.setVisibility(View.GONE);
-                        editButton.setVisibility(View.VISIBLE);
-                        editingName.setText(message.getName());
-                        editingName.setTextColor(Color.parseColor(message.getNameColor()));
-                        editingText.setText(message.getText());
-                        editingTag.setText(message.getTag());
-                        editingTag.setTextColor(Color.parseColor(message.getTagColor()));
-
-                        editButton.setOnClickListener(e -> {
-                            String newText = String.valueOf(messageInputField.getText());
-                            if (!newText.isEmpty()) {
-                                edit(message, newText);
-
-
-                                editButton.setVisibility(View.GONE);
-                                sendButton.setVisibility(View.VISIBLE);
-                                editingLayout.setVisibility(View.GONE);
-
-                                messageInputField.setText("");
-
-                                TextView isEdited = v.findViewById(R.id.isEdited);
-                                isEdited.setVisibility(View.VISIBLE);
-                                notifyDataSetChanged();
-                            }
-                        });
-
-                        editingCancel.setOnClickListener(c -> {
-                            editButton.setVisibility(View.GONE);
-                            sendButton.setVisibility(View.VISIBLE);
-                            editingLayout.setVisibility(View.GONE);
-                        });
-
-                        editingLayout.setVisibility(View.VISIBLE);
-                        popupWindow.dismiss();
-                    });
-                    actions.add(change);
-
-                    MessageAction delete = new MessageAction("Удалить", true, v1 -> {
-                        delete(message);
-                        popupWindow.dismiss();
-                    });
-                    actions.add(delete);
-
-                } else {
-
-                    MessageAction copy = new MessageAction("Cкопировать", true, v1 -> {
-                        copy(message.getText());
-                        popupWindow.dismiss();
-                    });
-                    actions.add(copy);
-
-                    MessageAction change = new MessageAction("Изменить", true, v1 -> {
-                        sendButton.setVisibility(View.GONE);
-                        editButton.setVisibility(View.VISIBLE);
-                        editingName.setText(message.getName());
-                        editingName.setTextColor(Color.parseColor(message.getNameColor()));
-                        editingText.setText(message.getText());
-                        editingTag.setText(message.getTag());
-                        editingTag.setTextColor(Color.parseColor(message.getTagColor()));
-
-                        editButton.setOnClickListener(e -> {
-                            String newText = String.valueOf(messageInputField.getText());
-                            if (!newText.isEmpty()) {
-                                edit(message, newText);
-
-
-                                editButton.setVisibility(View.GONE);
-                                sendButton.setVisibility(View.VISIBLE);
-                                editingLayout.setVisibility(View.GONE);
-
-                                messageInputField.setText("");
-
-                                TextView isEdited = v.findViewById(R.id.isEdited);
-                                isEdited.setVisibility(View.VISIBLE);
-                                notifyDataSetChanged();
-                            }
-                        });
-
-                        editingCancel.setOnClickListener(c -> {
-                            editButton.setVisibility(View.GONE);
-                            sendButton.setVisibility(View.VISIBLE);
-                            editingLayout.setVisibility(View.GONE);
-                        });
-
-                        editingLayout.setVisibility(View.VISIBLE);
-                        popupWindow.dismiss();
-                    });
-                    actions.add(change);
-
-
-                    MessageAction delete = new MessageAction("Удалить", true, v1 -> {
-                        delete(message);
-                        popupWindow.dismiss();
-                    });
-                    actions.add(delete);
-                }
-            } else if (Objects.equals(message.getSendersAccess(), "dev")) {
-                if (Objects.equals(currentUserEmail, message.getSendersEmail())) {
-
-                    MessageAction copy = new MessageAction("Cкопировать", true, v1 -> {
-                        copy(message.getText());
-                        popupWindow.dismiss();
-                    });
-                    actions.add(copy);
-
-                    MessageAction change = new MessageAction("Изменить", true, v1 -> {
-                        sendButton.setVisibility(View.GONE);
-                        editButton.setVisibility(View.VISIBLE);
-                        editingName.setText(message.getName());
-                        editingName.setTextColor(Color.parseColor(message.getNameColor()));
-                        editingText.setText(message.getText());
-                        editingTag.setText(message.getTag());
-                        editingTag.setTextColor(Color.parseColor(message.getTagColor()));
-
-                        editButton.setOnClickListener(e -> {
-                            String newText = String.valueOf(messageInputField.getText());
-                            if (!newText.isEmpty()) {
-                                edit(message, newText);
-
-
-                                editButton.setVisibility(View.GONE);
-                                sendButton.setVisibility(View.VISIBLE);
-                                editingLayout.setVisibility(View.GONE);
-
-                                messageInputField.setText("");
-
-                                TextView isEdited = v.findViewById(R.id.isEdited);
-                                isEdited.setVisibility(View.VISIBLE);
-                                notifyDataSetChanged();
-                            }
-                        });
-
-                        editingCancel.setOnClickListener(c -> {
-                            editButton.setVisibility(View.GONE);
-                            sendButton.setVisibility(View.VISIBLE);
-                            editingLayout.setVisibility(View.GONE);
-                        });
-
-                        editingLayout.setVisibility(View.VISIBLE);
-                        popupWindow.dismiss();
-                    });
-                    actions.add(change);
-
-                    MessageAction delete = new MessageAction("Удалить", true, v1 -> {
-                        delete(message);
-                        popupWindow.dismiss();
-                    });
-                    actions.add(delete);
-
-                } else {
-                    MessageAction copy = new MessageAction("Cкопировать", true, v1 -> {
-                        copy(message.getText());
-                        popupWindow.dismiss();
-                    });
-                    actions.add(copy);
-
-                    MessageAction change = new MessageAction("Изменить", true, v1 -> {
-                        sendButton.setVisibility(View.GONE);
-                        editButton.setVisibility(View.VISIBLE);
-                        editingName.setText(message.getName());
-                        editingName.setTextColor(Color.parseColor(message.getNameColor()));
-                        editingText.setText(message.getText());
-                        editingTag.setText(message.getTag());
-                        editingTag.setTextColor(Color.parseColor(message.getTagColor()));
-
-                        editButton.setOnClickListener(e -> {
-                            String newText = String.valueOf(messageInputField.getText());
-                            if (!newText.isEmpty()) {
-                                edit(message, newText);
-
-
-                                editButton.setVisibility(View.GONE);
-                                sendButton.setVisibility(View.VISIBLE);
-                                editingLayout.setVisibility(View.GONE);
-
-                                messageInputField.setText("");
-
-                                TextView isEdited = v.findViewById(R.id.isEdited);
-                                isEdited.setVisibility(View.VISIBLE);
-                                notifyDataSetChanged();
-                            }
-                        });
-
-                        editingCancel.setOnClickListener(c -> {
-                            editButton.setVisibility(View.GONE);
-                            sendButton.setVisibility(View.VISIBLE);
-                            editingLayout.setVisibility(View.GONE);
-                        });
-
-                        editingLayout.setVisibility(View.VISIBLE);
-                        popupWindow.dismiss();
-                    });
-                    actions.add(change);
-
-                    MessageAction delete = new MessageAction("Удалить", true, v1 -> {
-                        delete(message);
-                        popupWindow.dismiss();
-                    });
-                    actions.add(delete);
-
-
-                }
-            }
+            actions = getActions(message, popupWindow);
 
             RecyclerView recyclerView = popupView.findViewById(R.id.recyclerViewActions);
             recyclerView.setLayoutManager(new LinearLayoutManager(v.getContext()));
@@ -479,7 +212,7 @@ public class recyclerViewChatAdapter extends  RecyclerView.Adapter<recyclerViewC
         });
     }
 
-    public void edit (message message, String newText) {
+    public void editAdditional (message message, String newText) {
         message.setText(newText);
         notifyDataSetChanged();
 
@@ -499,6 +232,244 @@ public class recyclerViewChatAdapter extends  RecyclerView.Adapter<recyclerViewC
                 Log.e("API", "Failure-Editing: " + t.getMessage());
             }
         });
+    }
+
+    public void edit (message m) {
+        sendButton.setVisibility(View.GONE);
+        editButton.setVisibility(View.VISIBLE);
+        editingName.setText(m.getName());
+        editingName.setTextColor(Color.parseColor(m.getNameColor()));
+        editingText.setText(m.getText());
+        editingTag.setText(m.getTag());
+        editingTag.setTextColor(Color.parseColor(m.getTagColor()));
+
+        editButton.setOnClickListener(e -> {
+            String newText = String.valueOf(messageInputField.getText());
+            if (!newText.isEmpty()) {
+                editAdditional(m, newText);
+
+
+                editButton.setVisibility(View.GONE);
+                sendButton.setVisibility(View.VISIBLE);
+                editingLayout.setVisibility(View.GONE);
+
+                messageInputField.setText("");
+
+                isEdited.setVisibility(View.VISIBLE);
+                notifyDataSetChanged();
+            }
+        });
+
+        editingCancel.setOnClickListener(c -> {
+            editButton.setVisibility(View.GONE);
+            sendButton.setVisibility(View.VISIBLE);
+            editingLayout.setVisibility(View.GONE);
+        });
+
+        editingLayout.setVisibility(View.VISIBLE);
+    }
+
+    // Добавить откерп
+    // Апи запрос
+    // Бинд холдер
+    //
+    public void pin (message message) {
+        FrameLayout pinLayout = activity.findViewById(R.id.pinLayout);
+        TextView pinTag = activity.findViewById(R.id.pinTag);
+        TextView pinName = activity.findViewById(R.id.pinName);
+        TextView pinMessage = activity.findViewById(R.id.pinMessage);
+
+        if (!message.isPinned()) {
+            message.setPinned(true);
+            setHelper(userApi.setPinned(message.getId()));
+
+            pinTag.setText(message.getTag());
+            pinTag.setTextColor(Color.parseColor(message.getTagColor()));
+            pinName.setText(message.getName());
+            pinName.setTextColor(Color.parseColor(message.getNameColor()));
+            pinMessage.setText(message.getText());
+            if (message.getTextColor() != null) {
+                pinMessage.setTextColor(Color.parseColor(message.getTextColor()));
+            }
+            else {
+                pinMessage.setTextColor(Color.parseColor("#1E1E1E"));
+
+            }
+            pinLayout.setVisibility(View.VISIBLE);
+        }
+        else {
+            message.setPinned(false);
+            setHelper(userApi.setUnPinned(message.getId()));
+            pinLayout.setVisibility(View.GONE);
+        }
+    }
+
+    public List<MessageAction> getActions (message m, PopupWindow popupWindow) {
+        switch (m.getSendersAccess()) {
+            case "user":
+                return setUserActions(m, popupWindow);
+            case "moderator":
+                return setModeratorActions(m, popupWindow);
+            case "dev":
+                return setDevActions(m, popupWindow);
+            default:
+                return setDefaultActions(m, popupWindow);
+        }
+    }
+
+    public List<MessageAction> setUserActions (message m, PopupWindow popupWindow) {
+        List<MessageAction> actions = new ArrayList<>();
+        if (Objects.equals(currentUserEmail, m.getSendersEmail())) {
+            if (!m.isDeleted()) {
+            actions.add(new MessageAction("Cкопировать", true, v1 -> {
+                copy(m.getText());
+                popupWindow.dismiss();
+            }));
+
+                actions.add(new MessageAction("Изменить", true, v1 -> {
+                    edit(m);
+                    popupWindow.dismiss();
+                }));
+
+
+                actions.add(new MessageAction("Удалить", true, v1 -> {
+                    delete(m);
+                    popupWindow.dismiss();
+                }));
+            }
+        }
+        else {
+            if (!m.isDeleted()) {
+                actions.add(new MessageAction("Cкопировать", true, v1 -> {
+                    copy(m.getText());
+                    popupWindow.dismiss();
+                }));
+            }
+        }
+        return actions;
+    }
+
+    public List<MessageAction> setModeratorActions (message m, PopupWindow popupWindow) {
+        List<MessageAction> actions = new ArrayList<>();
+        if (Objects.equals(currentUserEmail, m.getSendersEmail())) {
+            if (!m.isDeleted()) {
+
+                actions.add(new MessageAction("Cкопировать", true, v1 -> {
+                    copy(m.getText());
+                    popupWindow.dismiss();
+                }));
+
+
+                actions.add(new MessageAction("Изменить", true, v1 -> {
+                    edit(m);
+                    popupWindow.dismiss();
+                }));
+
+
+                actions.add(new MessageAction(m.isPinned() ? "Открепить" : "Закрепить", true, v1 -> {
+                    pin(m);
+                    popupWindow.dismiss();
+                }));
+
+
+                actions.add(new MessageAction("Удалить", true, v1 -> {
+                    delete(m);
+                    popupWindow.dismiss();
+                }));
+            }
+        }
+        else {
+            if (!m.isDeleted()) {
+
+                actions.add(new MessageAction("Cкопировать", true, v1 -> {
+                    copy(m.getText());
+                    popupWindow.dismiss();
+                }));
+
+                actions.add(new MessageAction("Изменить", true, v1 -> {
+                    edit(m);
+                    popupWindow.dismiss();
+                }));
+
+
+                actions.add(new MessageAction(m.isPinned() ? "Открепить" : "Закрепить", true, v1 -> {
+                    pin(m);
+                    popupWindow.dismiss();
+                }));
+
+
+                actions.add(new MessageAction("Удалить", true, v1 -> {
+                    delete(m);
+                    popupWindow.dismiss();
+                }));
+            }
+        }
+        return actions;
+    }
+
+    public List<MessageAction> setDevActions (message m, PopupWindow popupWindow) {
+        List<MessageAction> actions = new ArrayList<>();
+        if (Objects.equals(currentUserEmail, m.getSendersEmail())) {
+            if (!m.isDeleted()) {
+
+                actions.add(new MessageAction("Cкопировать", true, v1 -> {
+                    copy(m.getText());
+                    popupWindow.dismiss();
+                }));
+
+                actions.add(new MessageAction("Изменить", true, v1 -> {
+                    edit(m);
+                    popupWindow.dismiss();
+                }));
+
+                actions.add(new MessageAction(m.isPinned() ? "Открепить" : "Закрепить", true, v1 -> {
+                    pin(m);
+                    popupWindow.dismiss();
+                }));
+
+
+                actions.add(new MessageAction("Удалить", true, v1 -> {
+                    delete(m);
+                    popupWindow.dismiss();
+                }));
+            }
+        }
+        else {
+            if (!m.isDeleted()) {
+                actions.add(new MessageAction("Cкопировать", true, v1 -> {
+                    copy(m.getText());
+                    popupWindow.dismiss();
+                }));
+
+                actions.add(new MessageAction("Изменить", true, v1 -> {
+                    edit(m);
+                    popupWindow.dismiss();
+                }));
+
+                actions.add(new MessageAction(m.isPinned() ? "Открепить" : "Закрепить", true, v1 -> {
+                    pin(m);
+                    popupWindow.dismiss();
+                }));
+
+
+                actions.add(new MessageAction("Удалить", true, v1 -> {
+                    delete(m);
+                    popupWindow.dismiss();
+                }));
+            }
+        }
+        return actions;
+    }
+
+    public List<MessageAction> setDefaultActions (message m, PopupWindow popupWindow) {
+        List<MessageAction> actions = new ArrayList<>();
+        if (Objects.equals(currentUserEmail, m.getSendersEmail())) {
+
+        }
+        else {
+
+        }
+        return actions;
     }
 
 }

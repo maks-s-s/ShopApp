@@ -17,8 +17,10 @@ public class MessageController {
     @Autowired
     private MessageRepository messageRepository;
 
+    private Message lastPinnedMessage;
+
     @GetMapping("/getAllMessages")
-    public ResponseEntity<List<Message>> getPasswordByEmail() {
+    public ResponseEntity<List<Message>> getAllMessages() {
         List<Message> messageList = messageRepository.findAllOrderedById();
         return ResponseEntity.status(HttpStatus.OK).body(messageList);
     }
@@ -80,5 +82,42 @@ public class MessageController {
         messageService.save(message);
     }
 
+    @PutMapping("/setPinned")
+    public void setPinned(long id) {
+        Message message = messageRepository.findById(id);
 
+        if (lastPinnedMessage == null) {
+            List<Message> messageList = messageRepository.findAllOrderedById();
+            for (Message m : messageList) {
+                if (m.isEdited()) {
+                    m.setEdited(false);
+                    messageService.save(m);
+                }
+            }
+        } else {
+            lastPinnedMessage.setPinned(false);
+            messageService.save(lastPinnedMessage);
+        }
+        
+        message.setPinned(true);
+        messageService.save(message);
+        lastPinnedMessage = message;
+    }
+
+    @GetMapping("/isPinnedById")
+    public ResponseEntity<Boolean> isPinnedById(long id) {
+        Message message = messageRepository.findById(id);
+
+        return ResponseEntity.status(HttpStatus.OK).body(message.isPinned());
+
+    }
+
+    @PutMapping("/setUnPinned")
+    public void setUnPinned(long id) {
+        Message message = messageRepository.findById(id);
+        
+        message.setPinned(false);
+        messageService.save(message);
+    }
+    
 }

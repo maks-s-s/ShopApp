@@ -120,3 +120,17 @@
 ### Fixed 
 - Chat updater rewritten to a more convenient version.
 
+## [1.0.8] - 2025-03-30 Russian
+### Добавлено
+- Конопка "закрепить", и вся логика для её работы, так-же обновлена АПИ для работы с закреплёнными сообщениями
+
+### Исправлено 
+- Пару незначительных багов
+
+## [1.0.8] - 2025-03-30 English
+### Added
+- Button "Pin" was implemented 
+
+### Fixed 
+- Small bugs was fixed
+

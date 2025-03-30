@@ -16,6 +16,7 @@ public class Message {
     private String textColor;
     private int avatar;
     private boolean isEdited;
+    private boolean isPinned;
     private boolean isAbused;
     private boolean isReplied;
     private boolean isDeleted;
@@ -189,5 +190,13 @@ public class Message {
 
     public void setWasChanged(boolean wasChanged) {
         this.wasChanged = wasChanged;
+    }
+
+    public boolean isPinned() {
+        return isPinned;
+    }
+
+    public void setPinned(boolean pinned) {
+        this.isPinned = pinned;
     }
 }

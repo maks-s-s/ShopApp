@@ -187,12 +187,14 @@ public class MainActivityJava extends AppCompatActivity {
         ImageButton toBasket = this.findViewById(R.id.toBasket);
         toBasket.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivityJava.this, ToBasket.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
             startActivity(intent);
         });
 
         ImageButton toChat = this.findViewById(R.id.toChat);
         toChat.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivityJava.this, ToChat.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
             startActivity(intent);
 
         });

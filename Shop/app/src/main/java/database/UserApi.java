@@ -79,4 +79,13 @@ public interface UserApi {
 
     @PUT("/message/setChanged")
     Call<Void> setChanged(@Query("id") long id);
+
+    @PUT("/message/setPinned")
+    Call<Void> setPinned(@Query("id") long id);
+
+    @GET("/message/isPinnedById")
+    Call<Boolean> isPinnedById(@Query("id") long id);
+
+    @PUT("/message/setUnPinned")
+    Call<Void> setUnPinned(@Query("id") long id);
 }

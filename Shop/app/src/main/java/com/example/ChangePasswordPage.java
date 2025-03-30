@@ -31,6 +31,7 @@ public class ChangePasswordPage extends AppCompatActivity {
             finish();
         });
 
+
         EditText emailET = this.findViewById(R.id.change_password_email_editText);
         EditText oldPasswordET = this.findViewById(R.id.change_password_oldPassword_editText);
         EditText newPasswordET = this.findViewById(R.id.change_password_newPassword_editText);

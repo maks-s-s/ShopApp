@@ -215,19 +215,97 @@
             android:layout_height="match_parent"
             android:background="#6C6C6C"
             android:layout_gravity="end"/>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/mainChatRecyclerView"
-            android:layout_width="990px"
-            android:layout_height="1624px">
-
-        </androidx.recyclerview.widget.RecyclerView>
-
         <View
             android:layout_width="match_parent"
             android:layout_height="5px"
             android:background="#6C6C6C"
             android:layout_gravity="top"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="1623px"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:id="@+id/pinLayout"
+                android:layout_width="980px"
+                android:layout_height="wrap_content"
+                android:background="#908CA7"
+                android:layout_marginStart="5px"
+                android:layout_marginTop="5px"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="50px"
+                    android:layout_height="50px"
+                    android:src="@drawable/push"
+                    android:layout_marginTop="14px"
+                    android:layout_marginStart="20px"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="140px"
+                    android:layout_gravity="end"
+                    android:layout_marginTop="14px">
+                    <TextView
+                        android:id="@+id/pinTag"
+                        android:layout_width="wrap_content"
+                        android:layout_height="45px"
+                        android:layout_gravity="start"
+                        android:background="@android:color/transparent"
+                        android:gravity="center"
+                        android:text="[Lead Dev]"
+                        android:textColor="#FF0000"
+                        android:textSize="35px"
+                        android:textStyle="bold"/>
+                    <TextView
+                        android:id="@+id/pinName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="45px"
+                        android:paddingStart="10px"
+                        android:layout_gravity="end"
+                        android:background="@android:color/transparent"
+                        android:gravity="center"
+                        android:text="UnBelievable_Xsoz"
+                        android:textColor="#611414"
+                        android:textSize="35px"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+
+                <ImageButton
+                    android:id="@+id/pinAvatar"
+                    android:layout_width="90px"
+                    android:layout_height="90px"
+                    android:layout_marginStart="867px"
+                    android:layout_marginTop="25px"
+                    android:background="@drawable/avatarexample"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ava"
+                    android:clipToOutline="true"/>
+                <TextView
+                    android:id="@+id/pinMessage"
+                    android:layout_width="678px"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="161px"
+                    android:layout_marginTop="62px"
+                    android:background="@android:color/transparent"
+                    android:gravity="end"
+                    android:text="Почему я съел 2кг оливье а в итоге похудел на 1.5кг :/"
+                    android:textColor="#1E1E1E"
+                    android:textSize="35px"
+                    android:paddingBottom="10px"/>
+
+            </FrameLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/mainChatRecyclerView"
+            android:layout_width="990px"
+            android:layout_height="wrap_content">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+        </LinearLayout>
 
         <FrameLayout
             android:id="@+id/messageEditTextFrameLayout"

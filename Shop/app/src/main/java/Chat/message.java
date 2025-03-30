@@ -2,6 +2,8 @@ package Chat;
 
 import android.view.View;
 
+import com.google.gson.annotations.SerializedName;
+
 public class message {
     private long id;
     private String time;
@@ -12,9 +14,12 @@ public class message {
     private String text;
     private String textColor;
     private int avatar;
+    @SerializedName("pinned")
+    private boolean isPinned;
     private boolean isEdited;
     private boolean isAbused;
     private boolean isReplied;
+    @SerializedName("deleted")
     private boolean isDeleted;
     private boolean isMuted;
     private boolean isBanned;
@@ -189,5 +194,13 @@ public class message {
 
     public void setChangerEmail(String changerEmail) {
         this.changerEmail = changerEmail;
+    }
+
+    public boolean isPinned() {
+        return isPinned;
+    }
+
+    public void setPinned(boolean pinned) {
+        this.isPinned = pinned;
     }
 }

@@ -77,6 +77,14 @@ public class ToChat extends AppCompatActivity implements ApiHelper {
         ImageButton toBasket = this.findViewById(R.id.toBasket);
         toBasket.setOnClickListener(v -> {
             Intent intent = new Intent(ToChat.this, ToBasket.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+            startActivity(intent);
+        });
+
+        ImageButton toMainPage = this.findViewById(R.id.toMain);
+        toMainPage.setOnClickListener(v -> {
+            Intent intent = new Intent(ToChat.this, MainActivityJava.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
             startActivity(intent);
         });
 
@@ -95,16 +103,8 @@ public class ToChat extends AppCompatActivity implements ApiHelper {
             }
         }, 0, 5, TimeUnit.SECONDS);
 
-        FrameLayout editingLayout = findViewById(R.id.editing_framelayout);
-        TextView editingName = findViewById(R.id.editing_name);
-        TextView editingText = findViewById(R.id.editing_text);
-        ImageButton editingCancel = findViewById(R.id.cancel_editting_button);
-        ImageButton editButton = findViewById(R.id.editButton);
-        ImageButton sendButtonE = findViewById(R.id.sendButton);
-        TextView editingTag = findViewById(R.id.editing_tag);
 
-
-        adapter = new recyclerViewChatAdapter(this, messageList, currentUserEmail, editingLayout, editingName, editingText, editingCancel, editButton, sendButtonE, messageInputField, editingTag);
+        adapter = new recyclerViewChatAdapter(this, messageList, currentUserEmail);
         recyclerView.setAdapter(adapter);
         scrollToTheEnd();
 
@@ -114,210 +114,116 @@ public class ToChat extends AppCompatActivity implements ApiHelper {
                 String messageText = messageInputField.getText().toString().trim();
 
                 if (!messageText.isEmpty()) {
-                    // Создание нового сообщения
-                    Call<String> CallNameColor = userApi.getNameColorByEmail(currentUserEmail.trim());
-                    CallNameColor.enqueue(new Callback<String>() {
 
-                        @Override
-                        public void onResponse(Call<String> call, Response<String> response) {
-                            if (response.isSuccessful()) {
-                                if (response.body() != null && !response.body().isEmpty()) {
-                                    nameColor = response.body();
-                                    Call<String> CallTag = userApi.getTagByEmail(currentUserEmail.trim());
-                                    CallTag.enqueue(new Callback<String>() {
+                    nameColor = getHelper(userApi.getNameColorByEmail(currentUserEmail.trim()));
+                    tag = getHelper(userApi.getTagByEmail(currentUserEmail.trim()));
+                    tagColor = getHelper(userApi.getTagColorByEmail(currentUserEmail.trim()));
 
-                                        @Override
-                                        public void onResponse(Call<String> call, Response<String> response) {
-                                            if (response.isSuccessful()) {
-                                                    tag = response.body();
+                    SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.getDefault());
+                    sdf.setTimeZone(TimeZone.getTimeZone("GMT+2"));
+                    String currentTime = sdf.format(new Date());
 
-                                                    Call<String> CallTagColor = userApi.getTagColorByEmail(currentUserEmail.trim());
-                                                    CallTagColor.enqueue(new Callback<String>() {
+                    message newMessage = new message(currentTime, currentUserName, messageText, currentUserEmail);
 
-                                                        @Override
-                                                        public void onResponse(Call<String> call, Response<String> response) {
-                                                            if (response.isSuccessful()) {
-                                                                if (response.body() != null && !response.body().isEmpty()) {
-                                                                    tagColor = response.body();
+                    if (nameColor == null) {
+                        newMessage.setNameColor("#1E1E1E");
+                        nameColor = "#1E1E1E";
+                    } else {
+                        newMessage.setNameColor(nameColor);
+                    }
 
-                                                                    // Получение текущего времени
-                                                                    SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.getDefault());
-                                                                    sdf.setTimeZone(TimeZone.getTimeZone("GMT+2"));
-                                                                    String currentTime = sdf.format(new Date());
+                    if (tagColor == null) {
+                        newMessage.setTagColor("#1E1E1E");
+                        tagColor = "#1E1E1E";
+                    } else {
+                        newMessage.setTagColor(tagColor);
+                    }
 
+                    newMessage.setTag(tag);
+                    newMessage.setSendersAccess(currentUserPermission);
+                    newMessage.setId(getHelper(userApi.getIdForNextMessage()) + 1);
 
-                                                                    message newMessage = new message(currentTime, currentUserName, messageText, currentUserEmail);
-                                                                    newMessage.setNameColor(nameColor);
-                                                                    newMessage.setTag(tag);
-                                                                    newMessage.setTagColor(tagColor);
-                                                                    newMessage.setSendersAccess(currentUserPermission);
+                    messageList.add(newMessage);
+                    setHelper(userApi.addNewMessage(newMessage));
 
-                                                                    userApi.getIdForNextMessage().enqueue(new Callback<Long>() {
-                                                                        @Override
-                                                                        public void onResponse(Call<Long> call, Response<Long> response) {
-                                                                            if (response.isSuccessful()) {
-                                                                                newMessage.setId(response.body() + 1);
-
-                                                                                messageList.add(newMessage);
-                                                                                CFaddMessage(newMessage).thenAccept(m -> {
-                                                                                    runOnUiThread(() -> {
-
-                                                                                    });
-                                                                                }).exceptionally(e -> {
-                                                                                    runOnUiThread(() -> {
-                                                                                        Log.e("API", "Failed to add message: " + e.getMessage());
-                                                                                    });
-                                                                                    return null;
-                                                                                });
-
-                                                                                // Уведомление адаптера об изменении данных
-                                                                                adapter.notifyItemInserted(messageList.size() -1);
-
-                                                                                // Прокрутка к последнему сообщению
-                                                                                recyclerView.scrollToPosition(messageList.size() - 1);
-
-                                                                                // Очистка поля ввода
-                                                                                messageInputField.setText("");
-                                                                            }
-                                                                            else {
-                                                                                Log.e("API", "Unsuccesful - getIdForNextMessage" + response.code());
-                                                                            }
-                                                                        }
-
-                                                                        @Override
-                                                                        public void onFailure(Call<Long> call, Throwable t) {
-                                                                            Log.e("API", "Fail - getIdForNextMessage" + t);
-                                                                        }
-                                                                    });
-                                                                }
-                                                                else {
-                                                                    tagColor = "#1E1E1E";
-                                                                }
-
-                                                            }
-                                                            else {
-                                                                Log.e("API", "Error-GetTagColor: " + response.code());
-                                                            }
-                                                        }
-
-                                                        @Override
-                                                        public void onFailure(Call<String> call, Throwable t) {
-                                                            Log.e("API", "Failure-GetTagColor: " + t.getMessage());
-                                                        }
-                                                    });
-                                            }
-                                            else {
-                                                Log.e("API", "Error-GetTag: " + response.code());
-                                            }
-                                        }
-
-                                        @Override
-                                        public void onFailure(Call<String> call, Throwable t) {
-                                            Log.e("API", "Failure-GetTag: " + t.getMessage());
-                                        }
-                                    });
-                                }
-                                else {
-                                    nameColor = "#1E1E1E";
-                                    Log.e("API", "Error-GetNameColor: " + response.body());
-                                }
-                            }
-                            else {
-                                Log.e("API", "Error-GetNameColor: " + response.code());
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<String> call, Throwable t) {
-                            Log.e("API", "Failure-GetNameColor: " + t.getMessage());
-                        }
-                    });
+                    adapter.notifyItemInserted(messageList.size() -1);
+                    recyclerView.scrollToPosition(messageList.size() - 1);
+                    messageInputField.setText("");
                 }
             }
         });
     }
 
-    public CompletableFuture<List<message>> getAllMessages() {
-        return CompletableFuture.supplyAsync(() -> {
-            try {
-                return userApi.getAllMessages().execute().body();
-            } catch (Exception e) {
-                throw new RuntimeException("Failed to get all messages ", e);
-            }
-        });
-    }
-
-//    public CompletableFuture<Long> CFgetIdForNextMessage() {
-//        return CompletableFuture.supplyAsync(() -> {
-//            try {
-//                return userApi.getIdForNextMessage().execute().body();
-//            } catch (Exception e) {
-//                throw new RuntimeException("Failed to get id for next message ", e);
-//            }
+//                  Old updater
+//
+//    public void updateMessageList (List<message> MainMessageList) {
+//        getAllMessages().thenAccept(messages -> {
+//            runOnUiThread(() -> {
+//                if (!messages.isEmpty() && !MainMessageList.isEmpty()) {
+//                    for (int i = 0; i < messages.size(); i++) {
+//                        if (!messages.get(i).equals(MainMessageList.get(i))) {
+//                            MainMessageList.set(i, messages.get(i));
+//                            adapter.notifyItemChanged(i);
+//                        }
+//                    }
+//                } else {
+//                    MainMessageList.addAll(messages);
+//                }
+//            });
+//        }).exceptionally(e -> {
+//            runOnUiThread(() -> {
+//                Log.e("API", "Failed to get allMessages: " + e.getMessage());
+//            });
+//            return null;
 //        });
 //    }
-    public void updateMessageList (List<message> MainMessageList) {
-        getAllMessages().thenAccept(messages -> {
-            runOnUiThread(() -> {
-                if (!messages.isEmpty() && !MainMessageList.isEmpty()) {
-                    for (int i = 0; i < messages.size(); i++) {
-                        if (!messages.get(i).equals(MainMessageList.get(i))) {
-                            MainMessageList.set(i, messages.get(i));
-                            adapter.notifyItemChanged(i);
-                        }
-                    }
-                } else {
-                    MainMessageList.addAll(messages);
-                }
-            });
-        }).exceptionally(e -> {
-            runOnUiThread(() -> {
-                Log.e("API", "Failed to get allMessages: " + e.getMessage());
-            });
-            return null;
-        });
-    }
 
     public void newUpdater (List<message> MainMessageList) {
-        getAllMessages().thenAccept(messages -> {
-            runOnUiThread(() -> {
-                if (!messages.isEmpty() && !MainMessageList.isEmpty()) {
-                    for (int i = 0; i < messages.size(); i++) {
-                        if (messages.get(i).isWasChanged()) {
+        List<message> messages = getHelper(userApi.getAllMessages());
+        runOnUiThread(() -> {
+            if (!messages.isEmpty() && !MainMessageList.isEmpty()) {
+                for (int i = 0; i < messages.size(); i++) {
+                    if (messages.get(i).isPinned()) {
+                        message message = messages.get(i);
+                        FrameLayout pinLayout = findViewById(R.id.pinLayout);
+                        TextView pinTag = findViewById(R.id.pinTag);
+                        TextView pinName = findViewById(R.id.pinName);
+                        TextView pinMessage = findViewById(R.id.pinMessage);
 
-                            if (!messages.get(i).getChangerEmail().isEmpty() && messages.get(i).getChangerEmail() != null) {
+                        pinTag.setText(message.getTag());
+                        pinTag.setTextColor(Color.parseColor(message.getTagColor()));
+                        pinName.setText(message.getName());
+                        pinName.setTextColor(Color.parseColor(message.getNameColor()));
+                        pinMessage.setText(message.getText());
+                        if (message.getTextColor() != null) {
+                            pinMessage.setTextColor(Color.parseColor(message.getTextColor()));
+                        }
+                        else {
+                            pinMessage.setTextColor(Color.parseColor("#1E1E1E"));
 
-                                if (!messages.get(i).getChangerEmail().equals(currentUserEmail)) {
-                                    MainMessageList.set(i, messages.get(i));
-                                    adapter.notifyItemChanged(i);
-                                    userApi.setUnChanged(messages.get(i).getId()).enqueue(new Callback<Void>() {
-                                        @Override
-                                        public void onResponse(Call<Void> call, Response<Void> response) {
-                                            if (response.isSuccessful()) {
+                        }
 
-                                            }
-                                        }
+                        pinLayout.setVisibility(View.VISIBLE);
+                    }
 
-                                        @Override
-                                        public void onFailure(Call<Void> call, Throwable t) {
+                    if (messages.get(i).isWasChanged()) {
 
-                                        }
-                                    });
+                        if (!messages.get(i).getChangerEmail().isEmpty() && messages.get(i).getChangerEmail() != null) {
 
-                                }
+                            if (!messages.get(i).getChangerEmail().equals(currentUserEmail)) {
+                                MainMessageList.set(i, messages.get(i));
+                                adapter.notifyItemChanged(i);
+                                setHelper(userApi.setUnChanged(messages.get(i).getId()));
                             }
                         }
                     }
-                } else {
-                    MainMessageList.addAll(messages);
                 }
-            });
-        }).exceptionally(e -> {
-            runOnUiThread(() -> {
-                Log.e("API", "Failed to get allMessages: " + e.getMessage());
-            });
-            return null;
+            } else {
+                MainMessageList.addAll(messages);
+            }
         });
+    }
+
 
         /*
         1. make new fields "wasChanged", "changersEmail"
@@ -365,10 +271,9 @@ public class ToChat extends AppCompatActivity implements ApiHelper {
                                     2:Ok
 
         */
-    }
 
     public void scrollToTheEnd() {
-        getAllMessages().thenAccept(messages -> {
+        List<message> messages = getHelper(userApi.getAllMessages());
             runOnUiThread(() -> {
                 messageList.clear();
                 if (messages != null) {
@@ -382,20 +287,6 @@ public class ToChat extends AppCompatActivity implements ApiHelper {
                     Log.e("Chat", "No messages received from the server.");
                 }
             });
-        }).exceptionally(e -> {
-            runOnUiThread(() -> Log.e("API", "Failed to fetch messages: " + e.getMessage()));
-            return null;
-        });
-    }
-
-    public CompletableFuture<message> CFaddMessage(message message) {
-        return CompletableFuture.supplyAsync(() -> {
-            try {
-                return userApi.addNewMessage(message).execute().body();
-            } catch (Exception e) {
-                throw new RuntimeException("Failed to get add message ", e);
-            }
-        });
     }
 
 }
