@@ -1,9 +1,12 @@
 package com.example.shop.demo;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "\"message\"")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "message_type", discriminatorType = DiscriminatorType.STRING)
 public class Message {
     @Id
     private Long id;
@@ -19,6 +22,8 @@ public class Message {
     private boolean isPinned;
     private boolean isAbused;
     private boolean isReplied;
+    private long idReplied;
+    private int repliedBackGroundColor;
     private boolean isDeleted;
     private boolean isMuted;
     private boolean isBanned;
@@ -27,7 +32,6 @@ public class Message {
     private String sendersAccess;
     private String ChangerEmail;
     private boolean wasChanged;
-
 
     public Message() {
     }
@@ -198,5 +202,21 @@ public class Message {
 
     public void setPinned(boolean pinned) {
         this.isPinned = pinned;
+    }
+
+    public long getIdReplied() {
+        return idReplied;
+    }
+
+    public void setIdReplied(long idReplied) {
+        this.idReplied = idReplied;
+    }
+
+    public int getRepliedBackGroundColor() {
+        return repliedBackGroundColor;
+    }
+
+    public void setRepliedBackGroundColor(int repliedBackGroundColor) {
+        this.repliedBackGroundColor = repliedBackGroundColor;
     }
 }

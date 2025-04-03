@@ -119,5 +119,11 @@ public class MessageController {
         message.setPinned(false);
         messageService.save(message);
     }
+
+    @GetMapping("/getMessageById")
+    public ResponseEntity<Message> getMessageById(long id) {
+        Message message = messageRepository.findById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(message);
+    }
     
 }

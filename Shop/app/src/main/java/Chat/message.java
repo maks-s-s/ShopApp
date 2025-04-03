@@ -5,28 +5,49 @@ import android.view.View;
 import com.google.gson.annotations.SerializedName;
 
 public class message {
+    @SerializedName("id")
     private long id;
+    @SerializedName("time")
     private String time;
+    @SerializedName("tag")
     private String tag;
+    @SerializedName("tagColor")
     private String tagColor;
+    @SerializedName("name")
     private String name;
+    @SerializedName("nameColor")
     private String nameColor;
+    @SerializedName("text")
     private String text;
+    @SerializedName("textColor")
     private String textColor;
+    @SerializedName("avatar")
     private int avatar;
     @SerializedName("pinned")
     private boolean isPinned;
+    @SerializedName("edited")
     private boolean isEdited;
+    @SerializedName("abused")
     private boolean isAbused;
+    @SerializedName("replied")
     private boolean isReplied;
+    private long idReplied;
+    private int repliedBackGroundColor;
     @SerializedName("deleted")
     private boolean isDeleted;
+    @SerializedName("muted")
     private boolean isMuted;
+    @SerializedName("banned")
     private boolean isBanned;
+    @SerializedName("wasChanged")
     private boolean wasChanged;
+    @SerializedName("changerEmail")
     private String changerEmail;
+    @SerializedName("sendersEmail")
     private String sendersEmail;
+    @SerializedName("messageBackgroundColor")
     private String messageBackgroundColor;
+    @SerializedName("sendersAccess")
     private String sendersAccess;
 
     public message (String time, String name, String text, String sendersEmail) {
@@ -202,5 +223,21 @@ public class message {
 
     public void setPinned(boolean pinned) {
         this.isPinned = pinned;
+    }
+
+    public long getIdReplied() {
+        return idReplied;
+    }
+
+    public void setIdReplied(long idReplied) {
+        this.idReplied = idReplied;
+    }
+
+    public int getRepliedBackGroundColor() {
+        return repliedBackGroundColor;
+    }
+
+    public void setRepliedBackGroundColor(int repliedBackGroundColor) {
+        this.repliedBackGroundColor = repliedBackGroundColor;
     }
 }

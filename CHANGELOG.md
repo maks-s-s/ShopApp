@@ -134,3 +134,18 @@
 ### Fixed 
 - Small bugs was fixed
 
+## [1.0.9] - 2025-04-03 Russian
+### Добавлено
+- Конопка "Ответить", и вся логика для её работы, так-же обновлена АПИ для работы с сообщениями содержащими ответ
+
+### Исправлено 
+- Множество мелких багов по всей программе
+
+## [1.0.9] - 2025-04-03 English
+### Added
+- Button "reply" was added, and all API implementation for reply messages
+
+### Fixed 
+- A lot of slight bugs throughout app
+
+

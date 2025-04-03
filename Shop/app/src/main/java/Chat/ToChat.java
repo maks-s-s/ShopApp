@@ -104,7 +104,7 @@ public class ToChat extends AppCompatActivity implements ApiHelper {
         }, 0, 5, TimeUnit.SECONDS);
 
 
-        adapter = new recyclerViewChatAdapter(this, messageList, currentUserEmail);
+        adapter = new recyclerViewChatAdapter(this, messageList, currentUserEmail, recyclerView);
         recyclerView.setAdapter(adapter);
         scrollToTheEnd();
 

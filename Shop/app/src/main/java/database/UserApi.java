@@ -88,4 +88,7 @@ public interface UserApi {
 
     @PUT("/message/setUnPinned")
     Call<Void> setUnPinned(@Query("id") long id);
+
+    @GET("/message/getMessageById")
+    Call<message> getMessageById(@Query("id") long id);
 }

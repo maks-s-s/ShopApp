@@ -347,12 +347,23 @@
                 android:scaleType="fitXY"
                 app:srcCompat="@drawable/pencil"
                 android:visibility="gone"/>
+
+            <ImageButton
+                android:id="@+id/replyButton"
+                android:layout_width="64px"
+                android:layout_height="64px"
+                android:layout_marginStart="840px"
+                android:layout_marginTop="27px"
+                android:background="@android:color/transparent"
+                android:scaleType="fitXY"
+                app:srcCompat="@drawable/send"
+                android:visibility="gone"/>
         </FrameLayout>
 
         <FrameLayout
             android:id="@+id/editing_framelayout"
             android:layout_width="980px"
-            android:layout_height="159px"
+            android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:layout_marginStart="5px"
             android:layout_marginBottom="120px"
@@ -398,7 +409,8 @@
                 android:textSize="37px"
                 android:layout_marginStart="36px"
                 android:layout_marginTop="66px"
-                android:textColor="#1E1E1E"/>
+                android:textColor="#1E1E1E"
+                android:paddingBottom="10px"/>
             
             <ImageButton
                 android:id="@+id/cancel_editting_button"

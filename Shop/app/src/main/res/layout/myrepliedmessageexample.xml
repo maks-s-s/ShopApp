@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/MessageClicableLayout"
     android:layout_width="980px"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:layout_marginStart="5px"
+    android:layout_marginTop="5px"
+    android:paddingBottom="10px"
+    android:clickable="true"
+    android:focusable="true">
 
         <View
             android:layout_width="match_parent"
@@ -10,8 +16,9 @@
             android:background="@color/main_page" />
 
         <FrameLayout
+            android:id="@+id/repliedMessageLayout"
             android:layout_width="980px"
-            android:layout_height="159px"
+            android:layout_height="wrap_content"
             android:background="@color/main_page">
 
             <View
@@ -61,7 +68,7 @@
                 android:layout_marginTop="67px"
                 android:background="@android:color/transparent"
                 android:gravity="start"
-                android:paddingBottom="10px"
+                android:paddingBottom="20px"
                 android:text="Я ебаный лох, рыгал жени на диван и подставил дашу "
                 android:textColor="#1E1E1E"
                 android:textSize="35px" />

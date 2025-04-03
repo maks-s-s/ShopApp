@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/MessageClicableLayout"
     android:layout_width="980px"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:layout_marginStart="5px"
+    android:layout_marginTop="5px"
+    android:paddingBottom="10px"
+    android:clickable="true"
+    android:focusable="true">
 
     <View
         android:layout_width="match_parent"
@@ -10,6 +16,7 @@
         android:background="@color/main_page" />
 
     <FrameLayout
+        android:id="@+id/repliedMessageLayout"
         android:layout_width="980px"
         android:layout_height="159px"
         android:background="@color/main_page">
