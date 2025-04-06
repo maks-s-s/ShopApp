@@ -40,10 +40,10 @@ public class ChangePasswordPage extends AppCompatActivity {
         Button changePassword = this.findViewById(R.id.changePassword);
 
         changePassword.setOnClickListener(v -> {
-            String enteredEmail = emailET.getText().toString();
-            String enteredOldPassword = oldPasswordET.getText().toString();
-            String enteredNewPassword = newPasswordET.getText().toString();
-            String enteredconfirmNewPassword = confirmNewPasswordET.getText().toString();
+            String enteredEmail = emailET.getText().toString().trim();
+            String enteredOldPassword = oldPasswordET.getText().toString().trim();
+            String enteredNewPassword = newPasswordET.getText().toString().trim();
+            String enteredconfirmNewPassword = confirmNewPasswordET.getText().toString().trim();
 
             if (enteredEmail.isEmpty() == false &&
                     enteredOldPassword.isEmpty() == false &&

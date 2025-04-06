@@ -14,6 +14,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -61,7 +62,6 @@ public class recyclerViewChatAdapter extends  RecyclerView.Adapter<recyclerViewC
     ImageButton sendButton;
     EditText messageInputField;
     TextView editingTag;
-    //TextView isEdited;
     UserApi userApi = ApiClient.getUserApi();
     Activity activity;
     ImageButton replyButton;
@@ -83,7 +83,6 @@ public class recyclerViewChatAdapter extends  RecyclerView.Adapter<recyclerViewC
         this.sendButton = activity.findViewById(R.id.sendButton);
         this.messageInputField = activity.findViewById(R.id.MessageEditText);
         this.editingTag = activity.findViewById(R.id.editing_tag);
-        //this.isEdited = activity.findViewById(R.id.isEdited);
         this.replyButton = activity.findViewById(R.id.replyButton);
     }
 
@@ -148,6 +147,9 @@ public class recyclerViewChatAdapter extends  RecyclerView.Adapter<recyclerViewC
         if (message.getTextColor() == null) {
             holder.textTextView.setTextColor(Color.parseColor("#1E1E1E"));
         }
+        else {
+            holder.textTextView.setTextColor(Color.parseColor(message.getTextColor()));
+        }
 
         holder.timeTextView.setText(message.getTime());
         holder.TagTextView.setText(message.getTag());
@@ -162,21 +164,20 @@ public class recyclerViewChatAdapter extends  RecyclerView.Adapter<recyclerViewC
                 popupWindow.setFocusable(true);
                 popupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-            int[] location = new int[2];
-            v.getLocationOnScreen(location);
-            if (Objects.equals(currentUserEmail, message.getSendersEmail())) {
-                popupWindow.showAsDropDown(v, 0, 0, Gravity.TOP | Gravity.END );
-            }
-            else {
-                popupWindow.showAsDropDown(v, 0, 0, Gravity.TOP | Gravity.START );
-            }
+                int[] location = new int[2];
+                v.getLocationOnScreen(location);
+                if (Objects.equals(currentUserEmail, message.getSendersEmail())) {
+                    popupWindow.showAsDropDown(v, 0, 0, Gravity.TOP | Gravity.END );
+                }
+                else {
+                    popupWindow.showAsDropDown(v, 0, 0, Gravity.TOP | Gravity.START );
+                }
 
-            actions = getActions(message, popupWindow, holder);
+                actions = getActions(message, popupWindow, holder);
 
-            RecyclerView recyclerView = popupView.findViewById(R.id.recyclerViewActions);
-            recyclerView.setLayoutManager(new LinearLayoutManager(v.getContext()));
-            recyclerView.setAdapter(new MessageActionAdapter(actions));});
-
+                RecyclerView recyclerView = popupView.findViewById(R.id.recyclerViewActions);
+                recyclerView.setLayoutManager(new LinearLayoutManager(v.getContext()));
+                recyclerView.setAdapter(new MessageActionAdapter(actions));});
         }
     }
 
@@ -241,25 +242,44 @@ public class recyclerViewChatAdapter extends  RecyclerView.Adapter<recyclerViewC
     }
 
     public void delete (message message) {
-        message.setText("Massage was deleted...");
-        message.setTextColor("#DF2226");
-        notifyDataSetChanged();
-        userApi.deleteMessage(message.getId(), currentUserEmail).enqueue(new Callback<Void>() {
-            @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                if (response.isSuccessful()) {
-                    Log.e("API", "successful deleting");
-                }
-                else {
-                    Log.e("API", "Unsuccessful deleting" + response.code());
-                }
-            }
 
-            @Override
-            public void onFailure(Call<Void> call, Throwable t) {
-                Log.e("API", "Failure-Deleting: " + t.getMessage());
-            }
+        View popupView = LayoutInflater.from(context).inflate(R.layout.delete_popup_menu, null);
+
+        PopupWindow deletePopupWindow = new PopupWindow(popupView, 745, ViewGroup.LayoutParams.WRAP_CONTENT);
+        deletePopupWindow.setFocusable(true);
+        deletePopupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        Button undo = popupView.findViewById(R.id.undo_button);
+        Button delete = popupView.findViewById(R.id.delete_button);
+
+        delete.setOnClickListener(v -> {
+            message.setText("Massage was deleted...");
+            message.setTextColor("#DF2226");
+            message.setDeleted(true);
+            notifyDataSetChanged();
+
+            userApi.deleteMessage(message.getId(), currentUserEmail).enqueue(new Callback<Void>() {
+                @Override
+                public void onResponse(Call<Void> call, Response<Void> response) {
+                    if (response.isSuccessful()) {
+                        Log.e("API", "successful deleting");
+                    }
+                    else {
+                        Log.e("API", "Unsuccessful deleting" + response.code());
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Void> call, Throwable t) {
+                    Log.e("API", "Failure-Deleting: " + t.getMessage());
+                }
+            });
+            deletePopupWindow.dismiss();
         });
+
+        undo.setOnClickListener(v -> deletePopupWindow.dismiss());
+
+        deletePopupWindow.showAtLocation(popupView, Gravity.CENTER, 0, 0);
     }
 
     public void editAdditional (message message, String newText) {
@@ -361,7 +381,9 @@ public class recyclerViewChatAdapter extends  RecyclerView.Adapter<recyclerViewC
 
 
     // tests
-    // trim for login page
+    // PopupWindow for delete - FINISHED but require tests
+
+    // Abuse button
     public void reply (message m) {
         sendButton.setVisibility(View.GONE);
         replyButton.setVisibility(View.VISIBLE);
@@ -375,7 +397,6 @@ public class recyclerViewChatAdapter extends  RecyclerView.Adapter<recyclerViewC
             String newMessageText = String.valueOf(messageInputField.getText());
             if (!newMessageText.isEmpty()) {
 
-                // Create repliedMessage
                 String nameColor = getHelper(userApi.getNameColorByEmail(currentUserEmail.trim()));
                 String tag = getHelper(userApi.getTagByEmail(currentUserEmail.trim()));
                 String tagColor = getHelper(userApi.getTagColorByEmail(currentUserEmail.trim()));

@@ -83,7 +83,7 @@ public class SignInPage extends AppCompatActivity {
 
         CheckBox rememberMe = this.findViewById(R.id.remember_me);
         sign_in.setOnClickListener(v -> {
-                String enteredEmail = email.getText().toString();
+                String enteredEmail = email.getText().toString().trim();
                 String enteredPassword = password.getText().toString().trim();
 
                 Call<String> getpass = userApi.getPasswordByEmail(enteredEmail);

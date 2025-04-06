@@ -148,4 +148,18 @@
 ### Fixed 
 - A lot of slight bugs throughout app
 
+## [1.0.10] - 2025-04-06 Russian
+### Добавлено
+- Всплывающее окно с подтверждением удаления
+
+### Исправлено 
+- Мелкие баги
+
+## [1.0.10] - 2025-04-06 English
+### Added
+- Popup window to make sure user really want to delete this message
+
+### Fixed 
+- Small bugs
+
 

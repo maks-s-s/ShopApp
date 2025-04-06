@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="200px"
+    android:orientation="vertical"
+    android:background="@drawable/style_for_delete_menu">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Are you really sure in deleting this message"
+        android:textSize="34px"
+        android:textColor="#1E1E1E"
+        android:padding="30px"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    <Button
+        android:id="@+id/undo_button"
+        android:layout_width="wrap_content"
+        android:layout_height="90px"
+        android:background="@android:color/transparent"
+        android:text="Undo"
+        android:textSize="30px"
+        android:layout_marginStart="8px"
+        android:textColor="#1E1E1E"/>
+
+    <Button
+        android:id="@+id/delete_button"
+        android:layout_width="wrap_content"
+        android:layout_height="90px"
+        android:background="@android:color/transparent"
+        android:text="Delete"
+        android:textSize="30px"
+        android:textColor="#1E1E1E"
+        android:layout_marginStart="220px"/>
+
+    </LinearLayout>
+</LinearLayout>
