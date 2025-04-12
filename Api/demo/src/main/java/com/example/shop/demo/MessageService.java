@@ -7,8 +7,6 @@ import org.springframework.stereotype.Service;
 public class MessageService {
 
     @Autowired
-    private MessageRepository MessageRepository;
-    @Autowired
     private MessageRepository messageRepository;
 
     public Message addMessage(Message m) {

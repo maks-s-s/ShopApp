@@ -4,6 +4,7 @@ import androidx.room.Delete;
 
 import java.util.List;
 
+import Chat.Abuse;
 import Chat.message;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -91,4 +92,10 @@ public interface UserApi {
 
     @GET("/message/getMessageById")
     Call<message> getMessageById(@Query("id") long id);
+
+    @POST("/abuse/addNewAbuse")
+    Call<String> addNewAbuse (@Query("email") String senderEmail, @Query("messageId") Long messageId, @Query("time") String time, @Query("reason") String reason, @Query("description") String description);
+
+    @PUT("/message/setAbused")
+    Call<Void> setAbused(@Query("id") long id);
 }

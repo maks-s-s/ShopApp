@@ -125,5 +125,13 @@ public class MessageController {
         Message message = messageRepository.findById(id);
         return ResponseEntity.status(HttpStatus.OK).body(message);
     }
+
+    @PutMapping("/setAbused")
+    public void setAbused(long id) {
+        Message message = messageRepository.findById(id);
+
+        message.setAbused(true);
+        messageService.save(message);
+    }
     
 }

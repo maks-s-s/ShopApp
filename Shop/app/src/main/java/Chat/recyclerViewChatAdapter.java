@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -139,6 +140,9 @@ public class recyclerViewChatAdapter extends  RecyclerView.Adapter<recyclerViewC
         if (message.isEdited()) {
             holder.isEdited.setVisibility(View.VISIBLE);
         }
+        if (message.isAbused()) {
+            holder.isAbused.setVisibility(View.VISIBLE);
+        }
 
         holder.nameTextView.setTextColor(Color.parseColor(message.getNameColor()));
         holder.nameTextView.setText(message.getName());
@@ -201,6 +205,8 @@ public class recyclerViewChatAdapter extends  RecyclerView.Adapter<recyclerViewC
         TextView repliedMessage;
         FrameLayout repliedMessageLayout;
 
+        ImageView isAbused;
+
         public MessageViewHolder(@NonNull View itemView) {
             super(itemView);
             nameTextView = itemView.findViewById(R.id.Name);
@@ -216,6 +222,8 @@ public class recyclerViewChatAdapter extends  RecyclerView.Adapter<recyclerViewC
                 repliedMessage = itemView.findViewById(R.id.repliedMessage);
                 repliedMessageLayout = itemView.findViewById(R.id.repliedMessageLayout);
             }
+
+            isAbused = itemView.findViewById(R.id.isComplained);
         }
     }
 
@@ -242,7 +250,6 @@ public class recyclerViewChatAdapter extends  RecyclerView.Adapter<recyclerViewC
     }
 
     public void delete (message message) {
-
         View popupView = LayoutInflater.from(context).inflate(R.layout.delete_popup_menu, null);
 
         PopupWindow deletePopupWindow = new PopupWindow(popupView, 745, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -379,11 +386,6 @@ public class recyclerViewChatAdapter extends  RecyclerView.Adapter<recyclerViewC
         }
     }
 
-
-    // tests
-    // PopupWindow for delete - FINISHED but require tests
-
-    // Abuse button
     public void reply (message m) {
         sendButton.setVisibility(View.GONE);
         replyButton.setVisibility(View.VISIBLE);
@@ -403,7 +405,7 @@ public class recyclerViewChatAdapter extends  RecyclerView.Adapter<recyclerViewC
                 String UserName = getHelper(userApi.getUserNameByEmail(currentUserEmail));
 
                 SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.getDefault());
-                sdf.setTimeZone(TimeZone.getTimeZone("GMT+2"));
+                sdf.setTimeZone(TimeZone.getTimeZone("GMT+3"));
                 String currentTime = sdf.format(new Date());
 
                 message newRepliedMessage = new message(currentTime, UserName, newMessageText, currentUserEmail);
@@ -449,6 +451,64 @@ public class recyclerViewChatAdapter extends  RecyclerView.Adapter<recyclerViewC
         });
 
         editingLayout.setVisibility(View.VISIBLE);
+    }
+
+    // tests
+    // PopupWindow for delete - FINISHED but require tests
+
+    // editText - make it more beautiful
+    // Notification about successful abuse
+
+    // create UI for new button and implement it
+    // for moderator and dev, different abilities
+    // add ability for dev and moderator to delete or do smth with abuses (in new window)
+    // if there no more abuses, set visibility for abuse indicator INVISIBLE
+    
+    public void abuse (message m, MessageViewHolder holder) {
+        View popupView = LayoutInflater.from(context).inflate(R.layout.choose_abuse_popup_menu, null);
+
+        PopupWindow chooseAbusePopupWindow = new PopupWindow(popupView, 1000, ViewGroup.LayoutParams.WRAP_CONTENT);
+        chooseAbusePopupWindow.setFocusable(true);
+        chooseAbusePopupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        Button undo = popupView.findViewById(R.id.undo_button);
+        Button abuse = popupView.findViewById(R.id.abuse_button);
+
+        CheckBox harassment = popupView.findViewById(R.id.harassment_checkbox);
+        CheckBox spam = popupView.findViewById(R.id.spam_checkbox);
+        CheckBox inappropriateContent = popupView.findViewById(R.id.InappropriateContent_checkbox);
+        CheckBox hateSpeech = popupView.findViewById(R.id.HateSpeech_checkbox);
+
+        EditText description = popupView.findViewById(R.id.description_editText);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.getDefault());
+        sdf.setTimeZone(TimeZone.getTimeZone("GMT+3"));
+        String time = sdf.format(new Date());
+
+        abuse.setOnClickListener(v -> {
+            if (harassment.isChecked()) {
+                setHelper(userApi.addNewAbuse(currentUserEmail, m.getId(), time, "Harassment", description.getText().toString()));
+            }
+            if (spam.isChecked()) {
+                setHelper(userApi.addNewAbuse(currentUserEmail, m.getId(), time, "Spam", description.getText().toString()));
+            }
+            if (inappropriateContent.isChecked()) {
+                setHelper(userApi.addNewAbuse(currentUserEmail, m.getId(), time, "Inappropriate Content", description.getText().toString()));
+            }
+            if (hateSpeech.isChecked()) {
+                setHelper(userApi.addNewAbuse(currentUserEmail, m.getId(), time, "Hate Speech", description.getText().toString()));
+            }
+
+            m.setAbused(true);
+            setHelper(userApi.setAbused(m.getId()));
+            holder.isAbused.setVisibility(View.VISIBLE);
+
+            chooseAbusePopupWindow.dismiss();
+        });
+
+        undo.setOnClickListener(v -> chooseAbusePopupWindow.dismiss());
+
+        chooseAbusePopupWindow.showAtLocation(popupView, Gravity.CENTER, 0, 0);
     }
 
     public List<MessageAction> getActions (message m, PopupWindow popupWindow, MessageViewHolder holder) {
@@ -499,6 +559,11 @@ public class recyclerViewChatAdapter extends  RecyclerView.Adapter<recyclerViewC
 
                 actions.add(new MessageAction("Cкопировать", true, v1 -> {
                     copy(m.getText());
+                    popupWindow.dismiss();
+                }));
+
+                actions.add(new MessageAction("Пожаловаться", true, v1 -> {
+                    abuse(m, holder);
                     popupWindow.dismiss();
                 }));
             }
@@ -556,15 +621,24 @@ public class recyclerViewChatAdapter extends  RecyclerView.Adapter<recyclerViewC
                     popupWindow.dismiss();
                 }));
 
-
                 actions.add(new MessageAction(m.isPinned() ? "Открепить" : "Закрепить", true, v1 -> {
                     pin(m);
                     popupWindow.dismiss();
                 }));
 
-
                 actions.add(new MessageAction("Удалить", true, v1 -> {
                     delete(m);
+                    popupWindow.dismiss();
+                }));
+
+                actions.add(new MessageAction("Пожаловаться", true, v1 -> {
+                    abuse(m, holder);
+                    popupWindow.dismiss();
+                }));
+            }
+            else {
+                actions.add(new MessageAction("Пожаловаться", true, v1 -> {
+                    abuse(m, holder);
                     popupWindow.dismiss();
                 }));
             }
@@ -601,6 +675,14 @@ public class recyclerViewChatAdapter extends  RecyclerView.Adapter<recyclerViewC
                     delete(m);
                     popupWindow.dismiss();
                 }));
+
+                actions.add(new MessageAction("Пожаловаться", true, v1 -> {
+                    abuse(m,holder);
+                    popupWindow.dismiss();
+                }));
+            }
+            else {
+
             }
         }
         else {
@@ -625,11 +707,18 @@ public class recyclerViewChatAdapter extends  RecyclerView.Adapter<recyclerViewC
                     popupWindow.dismiss();
                 }));
 
-
                 actions.add(new MessageAction("Удалить", true, v1 -> {
                     delete(m);
                     popupWindow.dismiss();
                 }));
+
+                actions.add(new MessageAction("Пожаловаться", true, v1 -> {
+                    abuse(m, holder);
+                    popupWindow.dismiss();
+                }));
+            }
+            else {
+
             }
         }
         return actions;

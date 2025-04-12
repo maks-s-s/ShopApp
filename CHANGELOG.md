@@ -155,11 +155,33 @@
 ### Исправлено 
 - Мелкие баги
 
+### Дополнительно 
+- Теперь ветка "main" только для глобальных апдейтов, сейчас она откачена до 1.0.7 версии, следующий коммит планируется на 1.1.0 версию с готовым чатом
+
 ## [1.0.10] - 2025-04-06 English
 ### Added
 - Popup window to make sure user really want to delete this message
 
 ### Fixed 
 - Small bugs
+
+### Extra 
+- The main branch is now reserved for global updates only. It has been rolled back to version 1.0.7, and the next planned commit will contain version 1.1.0 with a completed chat feature.
+
+## [1.0.11] - 2025-04-12 Russian
+### Добавлено
+- Кнопка "Пожаловаться", на данный в момент есть только 4 причины
+- Таблица в базе данных для жалоб 
+
+### В планах
+- Добавить возможность для доступа модератор и выше просматривать список жалоб по сообщению, удалять, редактировать, реагировать на них
+
+## [1.0.11] - 2025-04-12 English
+### Added
+- Button "Abuse", with only 4 abuse reason
+- Entity for abuses in DB
+
+### Future plans
+- Add ability for moderator and dev access to watch list of abuses, edit, delete, or to do something with them
 
 

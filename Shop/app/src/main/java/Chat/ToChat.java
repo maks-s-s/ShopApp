@@ -120,7 +120,7 @@ public class ToChat extends AppCompatActivity implements ApiHelper {
                     tagColor = getHelper(userApi.getTagColorByEmail(currentUserEmail.trim()));
 
                     SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.getDefault());
-                    sdf.setTimeZone(TimeZone.getTimeZone("GMT+2"));
+                    sdf.setTimeZone(TimeZone.getTimeZone("GMT+3"));
                     String currentTime = sdf.format(new Date());
 
                     message newMessage = new message(currentTime, currentUserName, messageText, currentUserEmail);
