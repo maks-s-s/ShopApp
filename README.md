@@ -24,10 +24,10 @@ API и серверная часть:
 Реализованы запросы для работы регистрации, входа и чата.
 
 Фото реализованных функций:
-![Логин](images/SignIn.png)
-![Регистрация](images/SignUp.png)
-![Смена пароля](images/ChangePass.png)
-![Главная страница](MainPage.png)
-![Чат](chat.png)
+![Логин](Images/SignIn.png)
+![Регистрация](Images/SignUp.png)
+![Смена пароля](Images/ChangePass.png)
+![Главная страница](Images/MainPage.png)
+![Чат](Images/chat.png)
 
 Видео-обзор - https://youtu.be/eOmDkLJdV5A 
