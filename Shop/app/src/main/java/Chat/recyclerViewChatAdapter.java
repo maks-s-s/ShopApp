@@ -124,7 +124,6 @@ public class recyclerViewChatAdapter extends  RecyclerView.Adapter<recyclerViewC
         message message = messageList.get(position);
 
         if (message.isReplied()) {
-
             long repId = message.getIdReplied();
             message messageInReply = getHelper(userApi.getMessageById(repId));
 
@@ -142,6 +141,9 @@ public class recyclerViewChatAdapter extends  RecyclerView.Adapter<recyclerViewC
         }
         if (message.isAbused()) {
             holder.isAbused.setVisibility(View.VISIBLE);
+        }
+        else {
+            holder.isAbused.setVisibility(View.INVISIBLE);
         }
 
         holder.nameTextView.setTextColor(Color.parseColor(message.getNameColor()));
@@ -453,17 +455,6 @@ public class recyclerViewChatAdapter extends  RecyclerView.Adapter<recyclerViewC
         editingLayout.setVisibility(View.VISIBLE);
     }
 
-    // tests
-    // PopupWindow for delete - FINISHED but require tests
-
-    // editText - make it more beautiful
-    // Notification about successful abuse
-
-    // create UI for new button and implement it
-    // for moderator and dev, different abilities
-    // add ability for dev and moderator to delete or do smth with abuses (in new window)
-    // if there no more abuses, set visibility for abuse indicator INVISIBLE
-    
     public void abuse (message m, MessageViewHolder holder) {
         View popupView = LayoutInflater.from(context).inflate(R.layout.choose_abuse_popup_menu, null);
 
@@ -486,29 +477,126 @@ public class recyclerViewChatAdapter extends  RecyclerView.Adapter<recyclerViewC
         String time = sdf.format(new Date());
 
         abuse.setOnClickListener(v -> {
-            if (harassment.isChecked()) {
-                setHelper(userApi.addNewAbuse(currentUserEmail, m.getId(), time, "Harassment", description.getText().toString()));
+            if (m.getSendersAccess().equals("dev") && !currentUserAccess.equals("dev")) {
+                showCustomToast("You don't have permission to abuse dev");
             }
-            if (spam.isChecked()) {
-                setHelper(userApi.addNewAbuse(currentUserEmail, m.getId(), time, "Spam", description.getText().toString()));
-            }
-            if (inappropriateContent.isChecked()) {
-                setHelper(userApi.addNewAbuse(currentUserEmail, m.getId(), time, "Inappropriate Content", description.getText().toString()));
-            }
-            if (hateSpeech.isChecked()) {
-                setHelper(userApi.addNewAbuse(currentUserEmail, m.getId(), time, "Hate Speech", description.getText().toString()));
-            }
+            else {
+                if (harassment.isChecked()) {
+                    setHelper(userApi.addNewAbuse(new Abuse(m.getId(), currentUserEmail, "Harassment", time, description.getText().toString())));
+                }
+                if (spam.isChecked()) {
+                    setHelper(userApi.addNewAbuse(new Abuse(m.getId(), currentUserEmail, "Spam", time, description.getText().toString())));
+                }
+                if (inappropriateContent.isChecked()) {
+                    setHelper(userApi.addNewAbuse(new Abuse(m.getId(), currentUserEmail, "Inappropriate Content", time, description.getText().toString())));
+                }
+                if (hateSpeech.isChecked()) {
+                    setHelper(userApi.addNewAbuse(new Abuse(m.getId(), currentUserEmail, "Hate Speech", time, description.getText().toString())));
+                }
 
-            m.setAbused(true);
-            setHelper(userApi.setAbused(m.getId()));
-            holder.isAbused.setVisibility(View.VISIBLE);
+                m.setAbused(true);
+                setHelper(userApi.setAbused(m.getId()));
+                holder.isAbused.setVisibility(View.VISIBLE);
 
-            chooseAbusePopupWindow.dismiss();
+                chooseAbusePopupWindow.dismiss();
+                showCustomToast("Жалоба получена");
+            }
         });
 
         undo.setOnClickListener(v -> chooseAbusePopupWindow.dismiss());
 
         chooseAbusePopupWindow.showAtLocation(popupView, Gravity.CENTER, 0, 0);
+    }
+
+    public void watchListOfAbuses (message m, MessageViewHolder holder) {
+        View popupView = LayoutInflater.from(context).inflate(R.layout.watch_list_of_abuses, null);
+
+        PopupWindow watchListOfAbuses = new PopupWindow(popupView, 862, ViewGroup.LayoutParams.WRAP_CONTENT);
+        watchListOfAbuses.setFocusable(true);
+        watchListOfAbuses.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        TextView name = popupView.findViewById(R.id.Name);
+        TextView tag = popupView.findViewById(R.id.Tag);
+        TextView time = popupView.findViewById(R.id.Time);
+        TextView message = popupView.findViewById(R.id.message);
+        TextView bansCount = popupView.findViewById(R.id.bansCount);
+        TextView mutesCount = popupView.findViewById(R.id.mutesCount);
+
+        RecyclerView abuses = popupView.findViewById(R.id.abuses_recycler_view);
+
+        name.setText(m.getName());
+        name.setTextColor(Color.parseColor(m.getNameColor()));
+        tag.setText(m.getTag());
+        tag.setTextColor(Color.parseColor(m.getTagColor()));
+        time.setText(m.getTime());
+        message.setText(m.getText());
+        bansCount.setText("Bans: not avaible now");
+        mutesCount.setText("Mutes: not avaible now");
+
+        ImageButton ban = popupView.findViewById(R.id.banUser);
+        ImageButton mute = popupView.findViewById(R.id.muteUser);
+        ImageButton deleteMessage = popupView.findViewById(R.id.deleteMessage);
+
+        abuses.setLayoutManager(new LinearLayoutManager(popupView.getContext()));
+        abuses.setAdapter(new ListOfAbusesAdapter(getHelper(userApi.getAllAbusesByMessageId(m.getId())), currentUserAccess, context, holder.isAbused));
+
+        ban.setOnClickListener(v -> {
+
+            watchListOfAbuses.dismiss();
+            showCustomToast("User was banned");
+        });
+
+        mute.setOnClickListener(v -> {
+
+            watchListOfAbuses.dismiss();
+            showCustomToast("User was mutted");
+        });
+
+        deleteMessage.setOnClickListener(v -> {
+            if (!m.isDeleted()) {
+                delete(m);
+                watchListOfAbuses.dismiss();
+            }
+            else {
+                showCustomToast("Message is already deleted");
+            }
+//            setHelper(userApi.clearAbuses());
+//            watchListOfAbuses.dismiss();
+        });
+        watchListOfAbuses.showAtLocation(popupView, Gravity.CENTER, 0, 0);
+    }
+
+    public void mute (message m) {
+        View popupView = LayoutInflater.from(context).inflate(R.layout.mute_popup_view, null);
+
+        PopupWindow mutePopupView = new PopupWindow(popupView, 745, ViewGroup.LayoutParams.WRAP_CONTENT);
+        mutePopupView.setFocusable(true);
+        mutePopupView.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        EditText days = popupView.findViewById(R.id.days);
+        EditText hours = popupView.findViewById(R.id.hours);
+        EditText mins = popupView.findViewById(R.id.mins);
+
+        Button undo = popupView.findViewById(R.id.undo_button);
+        Button mute = popupView.findViewById(R.id.mute_button);
+
+        undo.setOnClickListener(v -> {
+            mutePopupView.dismiss();
+        });
+
+        mute.setOnClickListener(v -> {
+
+            long daysL = Long.parseLong(days.getText().toString());
+            long hoursL = Long.parseLong(hours.getText().toString());
+            long minsL = Long.parseLong(mins.getText().toString());
+
+            long time = ((((daysL * 24) + hoursL) * 60) + minsL) * 60;
+
+            setHelper(userApi.muteUser(m.getSendersEmail(), time));
+            mutePopupView.dismiss();
+        });
+
+        mutePopupView.showAtLocation(popupView, Gravity.CENTER, 0, 0);
     }
 
     public List<MessageAction> getActions (message m, PopupWindow popupWindow, MessageViewHolder holder) {
@@ -637,11 +725,25 @@ public class recyclerViewChatAdapter extends  RecyclerView.Adapter<recyclerViewC
                 }));
             }
             else {
-                actions.add(new MessageAction("Пожаловаться", true, v1 -> {
-                    abuse(m, holder);
+
+            }
+
+            if (m.isAbused()) {
+                actions.add(new MessageAction("Посмотреть жалобы", true, v1 -> {
+                    watchListOfAbuses(m, holder);
                     popupWindow.dismiss();
                 }));
             }
+
+            actions.add(new MessageAction("Заглушить", true, v1 -> {
+                mute(m);
+                popupWindow.dismiss();
+            }));
+
+            actions.add(new MessageAction("Забанить", true, v1 -> {
+
+                popupWindow.dismiss();
+            }));
         }
         return actions;
     }
@@ -680,9 +782,21 @@ public class recyclerViewChatAdapter extends  RecyclerView.Adapter<recyclerViewC
                     abuse(m,holder);
                     popupWindow.dismiss();
                 }));
+
+                if (m.isAbused()) {
+                    actions.add(new MessageAction("Посмотреть жалобы", true, v1 -> {
+                        watchListOfAbuses(m, holder);
+                        popupWindow.dismiss();
+                    }));
+                }
             }
             else {
-
+                if (m.isAbused()) {
+                    actions.add(new MessageAction("Посмотреть жалобы", true, v1 -> {
+                        watchListOfAbuses(m, holder);
+                        popupWindow.dismiss();
+                    }));
+                }
             }
         }
         else {
@@ -720,6 +834,23 @@ public class recyclerViewChatAdapter extends  RecyclerView.Adapter<recyclerViewC
             else {
 
             }
+
+            if (m.isAbused()) {
+                actions.add(new MessageAction("Посмотреть жалобы", true, v1 -> {
+                    watchListOfAbuses(m, holder);
+                    popupWindow.dismiss();
+                }));
+            }
+
+            actions.add(new MessageAction("Заглушить", true, v1 -> {
+                mute(m);
+                popupWindow.dismiss();
+            }));
+
+            actions.add(new MessageAction("Забанить", true, v1 -> {
+
+                popupWindow.dismiss();
+            }));
         }
         return actions;
     }

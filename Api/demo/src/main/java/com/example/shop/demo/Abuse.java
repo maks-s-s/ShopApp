@@ -9,15 +9,8 @@ public class Abuse {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @ManyToOne
-    @JoinColumn(name = "message_id")
-    private Message message;
-
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User sender;
-
+    private long messageId;
+    private String senderEmail;
     private String reason;
     private String time;
     private String description;
@@ -54,19 +47,19 @@ public class Abuse {
         this.description = description;
     }
 
-    public Message getMessage() {
-        return message;
+    public long getMessageId() {
+        return messageId;
     }
 
-    public void setMessage(Message message) {
-        this.message = message;
+    public void setMessageId(long messageId) {
+        this.messageId = messageId;
     }
 
-    public User getSender() {
-        return sender;
+    public String getSenderEmail() {
+        return senderEmail;
     }
 
-    public void setSender(User sender) {
-        this.sender = sender;
+    public void setSenderEmail(String senderEmail) {
+        this.senderEmail = senderEmail;
     }
 }

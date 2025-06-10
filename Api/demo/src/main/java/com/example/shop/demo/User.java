@@ -3,6 +3,9 @@ package com.example.shop.demo;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
+import java.time.LocalDateTime.*;
+
 @Entity
 @Table(name = "\"user\"")
 public class User {
@@ -15,10 +18,8 @@ public class User {
     private String password;
     private String email;
     private int age;
-    private boolean isMutted = false;
-    private long muteTime = 0;
-    private boolean isBanned = false;
-    private long banTime = 0;
+    private String muteTime; // end of the Mute
+    private String banTime; // end of the Mute
     private String tag;
     private String tagColor = "#1E1E1E";
     private String nameColor = "#1E1E1E";
@@ -70,38 +71,6 @@ public class User {
         this.age = age;
     }
 
-    public boolean isMutted() {
-        return isMutted;
-    }
-
-    public void setMutted(boolean mutted) {
-        isMutted = mutted;
-    }
-
-    public long getMuteTime() {
-        return muteTime;
-    }
-
-    public void setMuteTime(long muteTime) {
-        this.muteTime = muteTime;
-    }
-
-    public boolean isBanned() {
-        return isBanned;
-    }
-
-    public void setBanned(boolean banned) {
-        isBanned = banned;
-    }
-
-    public long getBanTime() {
-        return banTime;
-    }
-
-    public void setBanTime(long banTime) {
-        this.banTime = banTime;
-    }
-
     public String getTag() {
         return tag;
     }
@@ -126,12 +95,27 @@ public class User {
         this.nameColor = nameColor;
     }
 
-
     public String getPermission() {
         return permission;
     }
 
     public void setPermission(String permission) {
         this.permission = permission;
+    }
+
+    public String getMuteTime() {
+        return muteTime;
+    }
+
+    public void setMuteTime(String muteTime) {
+        this.muteTime = muteTime;
+    }
+
+    public String getBanTime() {
+        return banTime;
+    }
+
+    public void setBanTime(String banTime) {
+        this.banTime = banTime;
     }
 }

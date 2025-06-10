@@ -8,12 +8,18 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+
 @RestController
 @RequestMapping("/users")
 public class UserController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private UserRepository userRepository;
 
     @PostMapping("/register")
     public User registerUser(@RequestBody User user) {
@@ -165,4 +171,23 @@ public class UserController {
         }
     }
 
+    @GetMapping("/getUserByEmail")
+    public ResponseEntity<User> getUserByEmail (@RequestParam String email) {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.findByEmail(email));
+    }
+
+    @PutMapping("/muteUser")
+    public void muteUser(String email, long time) {
+        DateTimeFormatter pattern = DateTimeFormatter.ofPattern("dd-MM-yyyy-HH-mm-ss");
+        User user = userService.findByEmail(email);
+        LocalDateTime muteTime = LocalDateTime.now(ZoneId.of("Europe/Kiev")).plusSeconds(time);
+        user.setMuteTime(muteTime.format(pattern));
+        userRepository.save(user);
+    }
+
+    @GetMapping("/getDateOfMute")
+    public ResponseEntity<String> getDateOfMute(String email) {
+        User user = userRepository.findByEmail(email);
+        return ResponseEntity.status(HttpStatus.OK).body(user.getMuteTime());
+    }
 }

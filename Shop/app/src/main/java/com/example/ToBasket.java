@@ -37,6 +37,7 @@ public class ToBasket extends AppCompatActivity {
             editor.putString("currentUserName","Undefined");
             editor.putString("currentUserEmail","Undefined");
             editor.putString("currentUserPermission","UNDEFINED");
+            editor.putBoolean("isCurrentUserMutted", false);
             editor.apply();
 
             Intent intent = new Intent(ToBasket.this, SignInPage.class);

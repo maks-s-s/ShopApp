@@ -25,8 +25,6 @@ public class Message {
     private long idReplied;
     private int repliedBackGroundColor;
     private boolean isDeleted;
-    private boolean isMuted;
-    private boolean isBanned;
     private String sendersEmail;
     private String messageBackgroundColor;
     private String sendersAccess;
@@ -130,22 +128,6 @@ public class Message {
 
     public void setDeleted(boolean deleted) {
         isDeleted = deleted;
-    }
-
-    public boolean isMuted() {
-        return isMuted;
-    }
-
-    public void setMuted(boolean muted) {
-        isMuted = muted;
-    }
-
-    public boolean isBanned() {
-        return isBanned;
-    }
-
-    public void setBanned(boolean banned) {
-        isBanned = banned;
     }
 
     public String getSendersEmail() {

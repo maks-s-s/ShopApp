@@ -1,22 +1,25 @@
 package database;
 
+import java.time.LocalDateTime;
+
 public class RDBUser {
     private Long id;
     private String username;
     private String password;
     private String email;
     private int age;
-    private boolean isMutted = false;
-    private long muteTime = 0;
-    private boolean isBanned = false;
+    private boolean isMutted;
+    private LocalDateTime muteTime;
+    private boolean isBanned;
     private long banTime = 0;
     private String tag;
     private String tagColor;
     private String nameColor = "#1E1E1E";
-    private String userPermission = "user";
+    private String permission;
 
-    // Геттеры и сеттеры
+
     public Long getId() { return id; }
+
     public void setId(Long id) { this.id = id; }
 
     public String getUsername() { return username; }
@@ -37,14 +40,6 @@ public class RDBUser {
 
     public void setMutted(boolean mutted) {
         isMutted = mutted;
-    }
-
-    public long getMuteTime() {
-        return muteTime;
-    }
-
-    public void setMuteTime(long muteTime) {
-        this.muteTime = muteTime;
     }
 
     public boolean isBanned() {
@@ -86,13 +81,20 @@ public class RDBUser {
     public void setNameColor(String nameColor) {
         this.nameColor = nameColor;
     }
-
-    public String getUserPermission() {
-        return userPermission;
+    public String getPermission() {
+        return permission;
     }
 
-    public void setUserPermission(String userPermission) {
-        this.userPermission = userPermission;
+    public void setPermission(String permission) {
+        this.permission = permission;
+    }
+
+    public LocalDateTime getMuteTime() {
+        return muteTime;
+    }
+
+    public void setMuteTime(LocalDateTime muteTime) {
+        this.muteTime = muteTime;
     }
 }
 

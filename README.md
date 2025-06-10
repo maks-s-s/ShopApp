@@ -1,18 +1,8 @@
-# ShopApp
-Online shop app (project for practice)
-
 ## Russian 
 ## Описание
-Это мой проект для тренировки навыков Java и нарабатывания новых (работа с базами данных, создания апи). 
-Сегодня 10.01.25, я создал этот репозиторий по совету друга, разработка приложения началсь 02.12.24 за это время была сделана: форма регистрации, входа, смены пароля, главная страница, пока что без бекенда, и сейчас я делаю чат, я поанирую делать комиты каждый день, и обновлять changelog.md.
+Этот проект — мобильное приложение, разработанное мной для практики Java и изучения связанных технологий. Главная цель заключалась в улучшении навыков работы с Java, базами данных и API в процессе создания функционального прототипа. Работа над приложением велась в течение 1–1,5 месяцев.
 
-## Установка
-1.Клонируйте репозиторий:
-   git clone https://github.com/username/MyJavaApp.git
-2.Установити зависимости
-    mvn install
-3.Запустите приложение
-    java -jar MyJavaApp.jar
+Проект задумывался исключительно для учебных целей, поэтому особое внимание уделялось backend-части и API, а не эстетической составляющей пользовательского интерфейса.
 
 ## Технологии
 - Java 17
@@ -21,28 +11,24 @@ Online shop app (project for practice)
 - Android Studio
 - IntelliJ IDEA
 
-## English
+## Реализованный функционал
+Страница входа и регистрации.
+Регистрация новых пользователей.
+Возможность смены пароля.
+Главная страница.
 
-## Description
-This is my project for practicing Java skills and developing new ones (working with databases, creating APIs). 
+Чат:
+Полностью рабочий функционал отправки и получения сообщений.
 
-Today is 10.01.25, and I created this repository on a friend's advice. The application development started on 02.12.24. So far, the following features have been implemented: registration form, login, password reset, and the main page (currently without a backend). Now, I am working on a chat feature. I plan to make daily commits and update the `changelog.md`.
+API и серверная часть:
+Таблицы для хранения данных пользователей и сообщений.
+Реализованы запросы для работы регистрации, входа и чата.
 
-## Installation
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/username/MyJavaApp.git
-2. Install dependencies:
-    mvn install
-3. Run the application:
-    java -jar MyJavaApp.jar
+Фото реализованных функций:
+![Логин](images/SignIn.png)
+![Регистрация](images/SignUp.png)
+![Смена пароля](images/ChangePass.png)
+![Главная страница](MainPage.png)
+![Чат](chat.png)
 
-## Technologies
-- Java 17
-- Spring Boot
-- PostgreSQL
-- Android Studio
-- IntelliJ IDEA
-
-
-### P.S I am not quite good at English, so I use chatgpt to translate my text.
+Видео-обзор - https://youtu.be/eOmDkLJdV5A 

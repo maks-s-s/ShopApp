@@ -1,5 +1,14 @@
 package Chat;
 
+// tests
+// PopupWindow for delete - FINISHED but require tests
+
+// show off keyboard after sending smth
+
+// Mutes and bans
+// Fix probable nulls in time
+// Bans
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -30,12 +39,15 @@ import com.example.shop.R;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.text.SimpleDateFormat;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.TimeZone;
+import java.time.LocalDateTime;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executors;
@@ -113,43 +125,51 @@ public class ToChat extends AppCompatActivity implements ApiHelper {
             public void onClick(View v) {
                 String messageText = messageInputField.getText().toString().trim();
 
-                if (!messageText.isEmpty()) {
+                String dateOfMute = getHelper(userApi.getDateOfMute(currentUserEmail));
+                DateTimeFormatter pattern = DateTimeFormatter.ofPattern("dd-MM-yyyy-HH-mm-ss");
 
-                    nameColor = getHelper(userApi.getNameColorByEmail(currentUserEmail.trim()));
-                    tag = getHelper(userApi.getTagByEmail(currentUserEmail.trim()));
-                    tagColor = getHelper(userApi.getTagColorByEmail(currentUserEmail.trim()));
-
-                    SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.getDefault());
-                    sdf.setTimeZone(TimeZone.getTimeZone("GMT+3"));
-                    String currentTime = sdf.format(new Date());
-
-                    message newMessage = new message(currentTime, currentUserName, messageText, currentUserEmail);
-
-                    if (nameColor == null) {
-                        newMessage.setNameColor("#1E1E1E");
-                        nameColor = "#1E1E1E";
-                    } else {
-                        newMessage.setNameColor(nameColor);
-                    }
-
-                    if (tagColor == null) {
-                        newMessage.setTagColor("#1E1E1E");
-                        tagColor = "#1E1E1E";
-                    } else {
-                        newMessage.setTagColor(tagColor);
-                    }
-
-                    newMessage.setTag(tag);
-                    newMessage.setSendersAccess(currentUserPermission);
-                    newMessage.setId(getHelper(userApi.getIdForNextMessage()) + 1);
-
-                    messageList.add(newMessage);
-                    setHelper(userApi.addNewMessage(newMessage));
-
-                    adapter.notifyItemInserted(messageList.size() -1);
-                    recyclerView.scrollToPosition(messageList.size() - 1);
-                    messageInputField.setText("");
+                if (!dateOfMute.isEmpty() && LocalDateTime.parse(dateOfMute, pattern).isAfter(LocalDateTime.now(ZoneId.of("Europe/Kiev")))) {
+                    showCustomToast("You are muted");
+                    return;
                 }
+                if (messageText.isEmpty()) {
+                    return;
+                }
+
+                nameColor = getHelper(userApi.getNameColorByEmail(currentUserEmail.trim()));
+                tag = getHelper(userApi.getTagByEmail(currentUserEmail.trim()));
+                tagColor = getHelper(userApi.getTagColorByEmail(currentUserEmail.trim()));
+
+                SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.getDefault());
+                sdf.setTimeZone(TimeZone.getTimeZone("GMT+3"));
+                String currentTime = sdf.format(new Date());
+
+                message newMessage = new message(currentTime, currentUserName, messageText, currentUserEmail);
+
+                if (nameColor == null) {
+                    newMessage.setNameColor("#1E1E1E");
+                    nameColor = "#1E1E1E";
+                } else {
+                    newMessage.setNameColor(nameColor);
+                }
+
+                if (tagColor == null) {
+                    newMessage.setTagColor("#1E1E1E");
+                    tagColor = "#1E1E1E";
+                } else {
+                    newMessage.setTagColor(tagColor);
+                }
+
+                newMessage.setTag(tag);
+                newMessage.setSendersAccess(currentUserPermission);
+                newMessage.setId(getHelper(userApi.getIdForNextMessage()) + 1);
+
+                messageList.add(newMessage);
+                setHelper(userApi.addNewMessage(newMessage));
+
+                adapter.notifyItemInserted(messageList.size() - 1);
+                recyclerView.scrollToPosition(messageList.size() - 1);
+                messageInputField.setText("");
             }
         });
     }
@@ -177,6 +197,19 @@ public class ToChat extends AppCompatActivity implements ApiHelper {
 //            return null;
 //        });
 //    }
+
+    private void showCustomToast(String message) {
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View layout = inflater.inflate(R.layout.customcopytoast, null);
+
+        TextView toastText = layout.findViewById(R.id.toastText);
+        toastText.setText(message);
+
+        Toast toast = new Toast(this);
+        toast.setDuration(Toast.LENGTH_SHORT);
+        toast.setView(layout);
+        toast.show();
+    }
 
     public void newUpdater (List<message> MainMessageList) {
         List<message> messages = getHelper(userApi.getAllMessages());

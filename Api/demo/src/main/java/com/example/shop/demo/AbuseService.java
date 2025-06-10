@@ -3,6 +3,8 @@ package com.example.shop.demo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class AbuseService {
 
@@ -13,5 +15,8 @@ public class AbuseService {
         return abusesRepository.save(a);
     }
 
+    public List<Abuse> getAbusesByMessageId(Long messageId) {
+        return abusesRepository.findByMessageId(messageId);
+    }
 
 }

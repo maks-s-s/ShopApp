@@ -78,7 +78,14 @@
         android:layout_width="800px"
         android:layout_height="242px"
         android:background="@color/white"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        android:gravity="start|top"
+        android:singleLine="false"
+        android:lines="5"
+        android:maxLines="5"
+        android:hint="Опишите причину жалобы"
+        android:inputType="textMultiLine"
+        android:lineSpacingExtra="4dp"/>
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -15,21 +15,28 @@ import androidx.room.Room;
 
 import com.example.shop.R;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import Chat.ToChat;
 import database.ApiClient;
+import database.ApiHelper;
 import database.RDBUser;
 import database.UserApi;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class SignInPage extends AppCompatActivity {
+public class SignInPage extends AppCompatActivity implements ApiHelper {
 
     protected void onCreate(Bundle savedInstanceState) {
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
@@ -126,6 +133,24 @@ public class SignInPage extends AppCompatActivity {
                                             editor.putString("currentUserName", storedName);
                                             editor.putString("currentUserEmail", enteredEmail);
                                             editor.apply();
+
+//                                            ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+//
+//                                            scheduler.scheduleWithFixedDelay(new Runnable() {
+//                                                @Override
+//                                                public void run() {
+//                                                   String dateOfMute = getHelper(userApi.getDateOfMute(enteredEmail));
+//                                                   DateTimeFormatter pattern = DateTimeFormatter.ofPattern("dd-MM-yyyy-hh-mm-ss");
+//                                                   Log.d("TIME", LocalDateTime.now(ZoneId.of("Europe/Kiev")).format(pattern));
+//                                                   if (LocalDateTime.parse(dateOfMute, pattern).isAfter(LocalDateTime.now(ZoneId.of("Europe/Kiev")))) {
+//                                                       editor.putBoolean("isCurrentUserMutted", true);
+//                                                   }
+//                                                   else {
+//                                                       editor.putBoolean("isCurrentUserMutted", false);
+//                                                   }
+//                                                   editor.apply();
+//                                                }
+//                                            }, 0, 10, TimeUnit.SECONDS);
                                         }
                                     }
 

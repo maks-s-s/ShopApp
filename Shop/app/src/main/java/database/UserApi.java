@@ -58,6 +58,9 @@ public interface UserApi {
     @PUT("/users/setPermissionByEmail")
     Call<Boolean> setPermissionByEmail(@Query("email") String email, @Query("newPermission") String newPermission);
 
+    @GET("/users/getUserByEmail")
+    Call<RDBUser> getUserByEmail(@Query("email") String email);
+
     @GET("/message/getAllMessages")
     Call<List<message>> getAllMessages();
 
@@ -94,8 +97,24 @@ public interface UserApi {
     Call<message> getMessageById(@Query("id") long id);
 
     @POST("/abuse/addNewAbuse")
-    Call<String> addNewAbuse (@Query("email") String senderEmail, @Query("messageId") Long messageId, @Query("time") String time, @Query("reason") String reason, @Query("description") String description);
+    Call<String> addNewAbuse (@Body Abuse abuse);
 
     @PUT("/message/setAbused")
     Call<Void> setAbused(@Query("id") long id);
+
+    @GET("/abuse/getAllAbuses")
+    Call<List<Abuse>> getAllAbusesByMessageId (@Query("id") long id);
+
+    @DELETE("/abuse/clearAbuses")
+    Call<Void> clearAbuses();
+
+    @DELETE("/abuse/deleteAbuse")
+    Call<Void> deleteAbuse(@Query("id") long id);
+
+    @PUT("/users/muteUser")
+    Call<Void> muteUser(@Query("email") String email, @Query("time") long time);
+
+    @GET("/users/getDateOfMute")
+    Call<String> getDateOfMute(@Query("email") String email);
+
 }

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/MessageClicableLayout"
+    android:layout_width="762px"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_marginTop="15px"
+    android:background="?attr/selectableItemBackground">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="15px">
+        <TextView
+            android:id="@+id/Time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10px"
+            android:layout_marginTop="2px"
+            android:layout_gravity="end"
+            android:background="@android:color/transparent"
+            android:gravity="center"
+            android:text="10:41"
+            android:textSize="28px"
+            android:textColor="#1E1E1E"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="130px"
+            android:layout_gravity="start">
+            <TextView
+                android:id="@+id/Tag"
+                android:layout_width="wrap_content"
+                android:layout_height="45px"
+                android:layout_gravity="start"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:text="[Королева дивана]"
+                android:textColor="#3FA13F"
+                android:textSize="30px"
+                android:textStyle="bold"/>
+            <TextView
+                android:id="@+id/Name"
+                android:layout_width="wrap_content"
+                android:layout_height="45px"
+                android:paddingStart="10px"
+                android:layout_gravity="end"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:text="Dasha_Drakon"
+                android:textColor="#1E1E1E"
+                android:textSize="30px"
+                android:textStyle="bold"/>
+        </LinearLayout>
+        <ImageButton
+            android:id="@+id/avatar"
+            android:layout_width="75px"
+            android:layout_height="75px"
+            android:layout_marginStart="25px"
+            android:layout_marginTop="10px"
+            android:background="@drawable/avatarexample"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ava"
+            android:clipToOutline="true"/>
+
+        <ImageButton
+            android:id="@+id/delte_abuse"
+            android:layout_width="64px"
+            android:layout_height="64px"
+            android:layout_marginStart="31px"
+            android:layout_marginTop="130px"
+            android:background="@android:color/transparent"
+            android:scaleType="fitXY"
+            android:src="@drawable/delete_abuse"
+            android:clipToOutline="true"/>
+        
+        <TextView
+            android:id="@+id/reason"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Reason: Spam"
+            android:layout_marginStart="135px"
+            android:layout_marginTop="50px"
+            android:textSize="29px"
+            android:textStyle="bold"
+            android:textColor="#000000"/>
+        
+        <TextView
+            android:id="@+id/description"
+            android:layout_width="602px"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="135px"
+            android:layout_marginTop="100px"
+            android:background="@android:color/transparent"
+            android:gravity="start"
+            android:text="Ребята это Назар рыгал на кровать, я  тут нипричём, бееееее, какой-то текст для тестов, лалала дракон рыгня ром кавказ кровать тазик щетка дом опять рыгня"
+            android:textColor="#1E1E1E"
+            android:textSize="28px"
+            android:paddingBottom="10px"/>
+    </FrameLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="7px"
+        android:background="#9D9D9D"/>
+</LinearLayout>

@@ -1,16 +1,20 @@
 package Chat;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Abuse {
     private Long id;
-    private Long message;
-    private String sender;
+    //@SerializedName("message_id")
+    private long messageId;
+    //@SerializedName("sender_email")
+    private String senderEmail;
     private String reason;
     private String time;
     private String description;
 
-    public Abuse (Long message, String sender, String reason, String time, String description) {
-        this.message = message;
-        this.sender = sender;
+    public Abuse (long messageId, String senderEmail, String reason, String time, String description) {
+        this.messageId = messageId;
+        this.senderEmail = senderEmail;
         this.reason = reason;
         this.time = time;
         this.description = description;
@@ -48,19 +52,19 @@ public class Abuse {
         this.description = description;
     }
 
-    public Long getMessage() {
-        return message;
+    public Long getMessageId() {
+        return messageId;
     }
 
-    public void setMessage(Long message) {
-        this.message = message;
+    public void setMessageId(Long message) {
+        this.messageId = message;
     }
 
-    public String getSender() {
-        return sender;
+    public String getSenderEmail() {
+        return senderEmail;
     }
 
-    public void setSender(String sender) {
-        this.sender = sender;
+    public void setSenderEmail(String sender) {
+        this.senderEmail = sender;
     }
 }
